@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "jsonresume-theme-even": "^0.22.1",
+    "resumed": "^4.0.0"
+  }
+}

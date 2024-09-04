@@ -1,0 +1,126 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
+  "basics": {
+    "name": "Braxton Williams",
+    "label": "Aspiring Software Developer",
+    "email": "braxtongwilliams@icloud.com",
+    "url": "https://braxtonwilliams.github.io",
+    "summary": "I am Braxton Williams, a dedicated student with a strong passion for software development. I pride myself on my work ethic and analytical thinking, always approaching challenges with a methodical and thoughtful perspective. As an aspiring developer, I’m constantly honing my skills and have a knack for quickly grasping new concepts and technologies. I enjoy mentoring other students, sharing what I’ve learned to help them grow, and refining my own understanding in the process. I’m a bit of a perfectionist, always striving to deliver my best work and ensuring that every detail is just right. My excellent communication skills allow me to collaborate effectively with others, making me a valuable team member and a promising future professional in the tech industry.",
+    "location": {
+      "address": "",
+      "postalCode": "74955",
+      "city": "Sallisaw",
+      "countryCode": "US",
+      "region": "Oklahoma"
+    }
+  },
+  "work": [
+    {
+      "name": "IT Department",
+      "location": "Sallisaw, OK",
+      "description": "IT internship through the Cherokee Nation summer job program",
+      "position": "Student Intern",
+      "url": "https://www.cherokee.org",
+      "startDate": "2022-07-10",
+      "summary": "I am a student intern in the IT Department at Sallisaw High School.  I assist the IT Specialist with a variety of tasks, including troubleshooting hardware and software issues, and setting up new equipment.  I have gained valuable hands-on experience in a professional IT environment and have developed my technical skills through this internship.  I have also had the opportunity to work with students and staff to provide technical support and assistance, which has helped me to improve my communication and problem-solving skills.",
+      "highlights": [
+        "Assisted with troubleshooting hardware and software issues",
+        "Set up new PC's and Chromebooks for students and staff",
+        "Provided technical support and assistance to students and staff"
+      ]
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "Son's of the American Legion",
+      "position": "Member",
+      "url": "https://www.legion.org/",
+      "startDate": "2024-08-01",
+      "summary": "The American Legion is built on a promise from men and women who swore with their lives to defend and protect the United States through military service. The promise begins at enlistment, grows through training and discipline in the U.S. Armed Forces and continues after discharge, as veterans in service to community, state and nation.",
+      "highlights": [
+        "I just recently became a member of the Sons of the American Legion organization.  As a new member, my responsibilities include attending meetings, volunteering at events, and supporting veterans and their families.  I am excited to be part of this organization and to contribute to the community in a meaningful way.  I look forward to learning more about the history and mission of the Sons of the American Legion and how I can make a positive impact through my involvement."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Sallisaw High School",
+      "url": "https://www.sallisawps.org",
+      "area": "",
+      "startDate": "2021-09-10",
+      "score": "4.0"
+    }
+  ],
+  "awards": [
+    {
+      "title": "National Indigenous Recognition Program",
+      "date": "2024-08-14",
+      "awarder": "CollegeBoard.org",
+      "summary": "The National Indigenous Recognition Program celebrates the academic achievements of Native American, Alaska Native, Native Hawaiian and Pacific Islander students."
+    }
+  ],
+  "skills": [
+    {
+      "name": "Web Development",
+      "level": "Intermediate",
+      "keywords": [
+        "HTML",
+        "CSS",
+        "Javascript",
+        "Python",
+        "Java"
+      ]
+    },
+    {
+      "name": "Hardware",
+      "level": "Intermediate",
+      "keywords": [
+        "Troubleshooting",
+        "Repair",
+        "Building",
+        "Chrome Books",
+        "Windows",
+        "Mac"
+      ]
+    },
+    {
+      "name": "Software",
+      "level": "Intermediate",
+      "keywords": [
+        "Microsoft Office",
+        "Google Suite",
+        "Adobe Suite",
+        "Visual Studio Code"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Java Application - Minecraft Plugin",
+      "description": "A custom Minecraft plugin created using Java that adds new features and functionality to the game. The plugin allows players to interact with the game in new ways, such as creating custom items, adding new commands, and implementing unique gameplay mechanics. This project was a great opportunity to learn more about Java programming and game development, as well as to explore the Minecraft modding community.",
+      "highlights": [
+        "Created a Minecraft plugin using Java",
+        "Implemented custom features and functionality",
+        "Learned how to develop and deploy a plugin for a popular game"
+      ],
+      "startDate": "2023-11-07"
+    },
+    {
+      "name": "Python Application - McDonald's Discount Calculator",
+      "description": "A simple Python program that calculates the total cost of a meal at McDonald's, including any discounts or promotions. The program prompts the user to enter the price of each item on the menu, as well as any discounts or promotions that may apply. It then calculates the total cost of the meal and displays the final price to the user. This program is a fun and interactive way to practice Python programming skills and learn how to create simple applications.",
+      "highlights": [
+        "Created a Python program that calculates the total cost of a meal at McDonald's",
+        "Used Python programming skills to prompt the user for input and perform calculations",
+        "Learned how to create a simple application using Python"
+      ],
+      "startDate": "2022-06-24"
+    }
+  ],
+  "meta": {
+    "canonical": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/sample.resume.json",
+    "version": "v1.0.0",
+    "lastModified": "2017-12-24T15:53:00",
+    "theme": "jsonresume-theme-even"
+  }
+}
+
