@@ -59,13 +59,31 @@
     .gallery {
       flex: 1;
       width: 100%;
-      max-width: 1180px;
+      max-width: 1280px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
-      gap: 1.25rem;
+      grid-template-columns: minmax(0, 1fr);
+      gap: clamp(0.85rem, 2vw, 1.35rem);
       align-items: stretch;
-      padding: 1.5rem 1rem 2.5rem;
+      padding: 1.5rem clamp(0.75rem, 3vw, 1rem) 2.5rem;
+    }
+
+    @media (min-width: 520px) {
+      .gallery {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 820px) {
+      .gallery {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1120px) {
+      .gallery {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
     }
 
     .model-card {
@@ -214,6 +232,23 @@
       font-size: 0.875rem;
       line-height: 1.45;
       color: #94a3b8;
+    }
+
+    .model-software {
+      margin: 0 0 0.65rem;
+      font-size: 0.8125rem;
+      line-height: 1.4;
+      color: #cbd5e1;
+    }
+
+    .model-software-label {
+      display: inline-block;
+      margin-right: 0.35rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #64748b;
     }
 
     .model-card .open-viewer {
@@ -671,7 +706,7 @@
     </header>
 
     <main class="gallery">
-      <!-- Per model: card title + description come only from `.open-viewer` (`data-title`, `data-about`). -->
+      <!-- Per model: title, about, and CAD tool come from `.open-viewer` (`data-title`, `data-about`, `data-software`; default software is Fusion 360). -->
       <article class="model-card">
         <button type="button" class="ref-thumb-btn js-gallery-ref" id="open-bed-ref-image"
           data-ref-src="images/Screenshot%202026-05-11%20at%204.45.23%E2%80%AFPM.png"
@@ -694,10 +729,12 @@
             <a href="https://www.amazon.com/dp/B0CN39WWYG?th=1" target="_blank" rel="noopener noreferrer">Amazon listing (reference)</a>
           </li>
         </ul>
+        <p class="model-software"></p>
         <button type="button" class="open-viewer"
           data-src="Bed_Frame_Only.stl.glb"
           data-title="Bed frame"
           data-alt="Bed frame 3D model (Fusion 360 export)"
+          data-software="Fusion 360"
           data-orbit="0deg 135deg 105%"
           data-about="Modeled based upon my current bed, with the intent to recrease all items in my bedroom to scale and 3D print them minuturized to put in a mini version of my bedroom and sit on my shelf."
           data-ref-src="images/Screenshot%202026-05-11%20at%204.45.23%E2%80%AFPM.png"
@@ -723,10 +760,12 @@
           </span>
         </div>
         <p class="tagline">Rear wheel for an engineering-class mouse-trap car—designed lighter than running on a record.</p>
+        <p class="model-software"></p>
         <button type="button" class="open-viewer"
           data-src="Mouse_Trap_Car_Wheel_Whole.stl.glb"
           data-title="Mouse Trap Car Wheel"
           data-alt="Mouse trap car wheel (Fusion 360 export)"
+          data-software="Fusion 360"
           data-orbit="0deg 75deg 105%"
           data-about="Served as the back wheel of a mouse trap car I built for an engineering class. This wheel was made as a lighter weight alternative to a record."
           data-ref-src="images/IMG_5994.PNG"
@@ -750,10 +789,12 @@
           </span>
         </div>
         <p class="tagline">CD hub that mounts on a 5 cm dowel axle—built for the mouse-trap car project.</p>
+        <p class="model-software"></p>
         <button type="button" class="open-viewer"
           data-src="CD_Wheel_Insert.stl.glb"
           data-title="CD wheel insert"
           data-alt="CD wheel insert (Fusion 360 export)"
+          data-software="Fusion 360"
           data-orbit="0deg 75deg 105%"
           data-about="Insert for CD that would attach to a 5cm dowel rod that could be used as an axel (Made for a Mouse Trap Car Project).">
           Open 3D viewer
@@ -775,10 +816,12 @@
           </span>
         </div>
         <p class="tagline">Record hub for a 5 cm dowel axle on the mouse-trap car.</p>
+        <p class="model-software"></p>
         <button type="button" class="open-viewer"
           data-src="Record_Wheel_Insert_Half_V2.stl.glb"
           data-title="Record wheel insert (half V2)"
           data-alt="Record wheel insert half V2 (Fusion 360 export)"
+          data-software="Fusion 360"
           data-orbit="0deg 75deg 105%"
           data-about="Insert for a record that would attach to a 5cm dowel rod that could be used as an axel (Made for a Mouse Trap Car Project). Requires 2, (one per side).">
           Open 3D viewer
@@ -800,12 +843,41 @@
           </span>
         </div>
         <p class="tagline">180° hinge designed for fun to better understand how hinges work.</p>
+        <p class="model-software"></p>
         <button type="button" class="open-viewer"
           data-src="Hinge.stl.glb"
           data-title="Hinge"
           data-alt="Hinge (Fusion 360 export)"
+          data-software="Fusion 360"
           data-orbit="0deg 75deg 105%"
           data-about="180 degree hinge created for testing purposes.">
+          Open 3D viewer
+        </button>
+      </article>
+
+      <article class="model-card">
+        <div class="model-card-preview-placeholder" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3l9 4.5v9L12 21l-9-4.5v-9L12 3z" />
+            <path d="M12 12l9-4.5M12 12v9M12 12L3 7.5" />
+          </svg>
+        </div>
+        <div class="model-card-head">
+          <h2></h2>
+          <span class="model-info-wrap">
+            <button type="button" class="model-info-btn" aria-label="About this model"><span aria-hidden="true">i</span></button>
+            <span class="model-info-tip" role="tooltip"></span>
+          </span>
+        </div>
+        <p class="tagline">Eyewear frame modeled for printing or display.</p>
+        <p class="model-software"></p>
+        <button type="button" class="open-viewer"
+          data-src="Glasses.stl.glb"
+          data-title="Glasses"
+          data-alt="Glasses (Inventor export)"
+          data-orbit="0deg 75deg 105%"
+          data-software="Inventor Pro"
+          data-about="Glasses frame modeled in Autodesk Inventor Pro (edit this description to match your project).">
           Open 3D viewer
         </button>
       </article>
@@ -890,7 +962,7 @@
     const closeBtn = document.getElementById('close-viewer');
     const closeRefBtn = document.getElementById('close-ref-image');
 
-    /** Card heading + (i) tooltip: sole sources are `data-title` and `data-about` on `.open-viewer`. */
+    /** Card heading, (i) tooltip, CAD line: from `data-title`, `data-about`, `data-software` on `.open-viewer` (software defaults to Fusion 360 if omitted). */
     function syncGalleryFromOpenViewer() {
       for (const card of document.querySelectorAll('.model-card')) {
         const viewerBtn = card.querySelector('.open-viewer');
@@ -902,6 +974,16 @@
         const tip = card.querySelector('.model-info-tip');
         if (tip && viewerBtn.dataset.about !== undefined) {
           tip.textContent = viewerBtn.dataset.about;
+        }
+        const swEl = card.querySelector('.model-software');
+        if (swEl) {
+          const sw = viewerBtn.dataset.software || 'Fusion 360';
+          swEl.textContent = '';
+          const lab = document.createElement('span');
+          lab.className = 'model-software-label';
+          lab.textContent = 'Created in';
+          swEl.appendChild(lab);
+          swEl.appendChild(document.createTextNode(' ' + sw));
         }
       }
     }
