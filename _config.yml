@@ -1,0 +1,13 @@
+exclude:
+  - Dockerfile
+  - docker-compose.yml
+  - docker-compose.yaml
+  - compose.yml
+  - compose.yaml
+  - nginx.conf
+  - Makefile
+  - build-site.mjs
+  - TRAEFIK-SETUP.md
+  - README.md
+  - "*.md"
+  - assets

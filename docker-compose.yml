@@ -1,0 +1,25 @@
+services:
+  brax10-site:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: brax10-site
+    restart: unless-stopped
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+      
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.brax10site-http.rule=Host(`www.brax10.test`)
+      - traefik.http.routers.brax10site-http.entrypoints=web
+      - traefik.http.routers.brax10site-https.rule=Host(`www.brax10.test`)
+      - traefik.http.routers.brax10site-https.entrypoints=websecure
+      - traefik.http.routers.brax10site-https.tls=true
+      - traefik.http.services.brax10site.loadbalancer.server.port=80
+    networks:
+      - dev_proxy
+
+networks:
+  dev_proxy:
+    external: true
+    name: dev_proxy
