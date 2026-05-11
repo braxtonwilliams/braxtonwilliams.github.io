@@ -183,8 +183,15 @@
       width: min(340px, calc(100vw - 3rem));
     }
 
+    /* Reference photos: shared frame + scale any aspect ratio / resolution the same way */
+    :root {
+      --ref-thumb-ratio: 16 / 10;
+      --ref-thumb-fit: contain;
+      --ref-dialog-img-max-h: min(72vh, 720px);
+    }
+
     .model-card-preview-placeholder {
-      aspect-ratio: 16 / 10;
+      aspect-ratio: var(--ref-thumb-ratio);
       border-radius: 10px;
       background: radial-gradient(ellipse 80% 70% at 50% 60%, #2a3548 0%, #0f1117 72%);
       border: 1px solid #2f3a4d;
@@ -225,7 +232,7 @@
       overflow: hidden;
       cursor: zoom-in;
       background: #0f1117;
-      aspect-ratio: 16 / 10;
+      aspect-ratio: var(--ref-thumb-ratio);
     }
 
     .ref-thumb-btn:focus-visible {
@@ -237,7 +244,8 @@
       display: block;
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: var(--ref-thumb-fit);
+      object-position: center;
     }
 
     .ref-thumb-label {
@@ -379,11 +387,18 @@
       overflow: auto;
       text-align: center;
       background: #050608;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: min(52vh, 420px);
     }
 
     .image-ref-body img {
       max-width: 100%;
+      max-height: var(--ref-dialog-img-max-h);
+      width: auto;
       height: auto;
+      object-fit: contain;
       vertical-align: middle;
       border-radius: 6px;
     }
@@ -656,25 +671,24 @@
     </header>
 
     <main class="gallery">
+      <!-- Per model: card title + description come only from `.open-viewer` (`data-title`, `data-about`). -->
       <article class="model-card">
         <button type="button" class="ref-thumb-btn js-gallery-ref" id="open-bed-ref-image"
           data-ref-src="images/Screenshot%202026-05-11%20at%204.45.23%E2%80%AFPM.png"
           data-ref-title="Bed frame · reference"
           data-amazon="https://www.amazon.com/dp/B0CN39WWYG?th=1"
           aria-haspopup="dialog" aria-controls="ref-image-dialog">
-          <img src="images/Screenshot%202026-05-11%20at%204.45.23%E2%80%AFPM.png" alt="Reference screenshot for bed frame design" width="960" height="600" loading="lazy" decoding="async">
+          <img src="images/Screenshot%202026-05-11%20at%204.45.23%E2%80%AFPM.png" alt="Reference screenshot for bed frame design" loading="lazy" decoding="async">
           <span class="ref-thumb-label">Reference image</span>
         </button>
         <div class="model-card-head">
-          <h2>Bed frame</h2>
+          <h2></h2>
           <span class="model-info-wrap">
             <button type="button" class="model-info-btn" aria-label="About this model"><span aria-hidden="true">i</span></button>
-            <span class="model-info-tip" role="tooltip">
-              Modeled to match real-world hardware for a bed upgrade—checking rail spacing, pilot holes, and clearances before committing to metal parts or fasteners (placeholder description—edit anytime).
-            </span>
+            <span class="model-info-tip" role="tooltip"></span>
           </span>
         </div>
-        <p class="tagline">Interactive GLB export. Drag to orbit, scroll or pinch to zoom.</p>
+        <p class="tagline">Based on my real bed.</p>
         <ul class="model-links">
           <li>
             <a href="https://www.amazon.com/dp/B0CN39WWYG?th=1" target="_blank" rel="noopener noreferrer">Amazon listing (reference)</a>
@@ -685,7 +699,7 @@
           data-title="Bed frame"
           data-alt="Bed frame 3D model (Fusion 360 export)"
           data-orbit="0deg 135deg 105%"
-          data-about="Modeled to match real-world hardware for a bed upgrade—checking rail spacing, pilot holes, and clearances before committing to metal parts or fasteners (placeholder description—edit anytime)."
+          data-about="Modeled based upon my current bed, with the intent to recrease all items in my bedroom to scale and 3D print them minuturized to put in a mini version of my bedroom and sit on my shelf."
           data-ref-src="images/Screenshot%202026-05-11%20at%204.45.23%E2%80%AFPM.png"
           data-ref-title="Bed frame · reference"
           data-amazon="https://www.amazon.com/dp/B0CN39WWYG?th=1">
@@ -694,28 +708,29 @@
       </article>
 
       <article class="model-card">
-        <div class="model-card-preview-placeholder" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 3l9 4.5v9L12 21l-9-4.5v-9L12 3z" />
-            <path d="M12 12l9-4.5M12 12v9M12 12L3 7.5" />
-          </svg>
-        </div>
+        <button type="button" class="ref-thumb-btn js-gallery-ref"
+          data-ref-src="images/IMG_5994.PNG"
+          data-ref-title="Mouse Trap Car Wheel · reference"
+          aria-haspopup="dialog" aria-controls="ref-image-dialog">
+          <img src="images/IMG_5994.PNG" alt="Photo reference for mouse trap car wheel" loading="lazy" decoding="async">
+          <span class="ref-thumb-label">Reference image</span>
+        </button>
         <div class="model-card-head">
-          <h2>Mouse trap car wheel</h2>
+          <h2></h2>
           <span class="model-info-wrap">
             <button type="button" class="model-info-btn" aria-label="About this model"><span aria-hidden="true">i</span></button>
-            <span class="model-info-tip" role="tooltip">
-              Wheel body for a physics mouse-trap vehicle—balanced rim mass and diameter for straight runs on a gym floor (guess—replace with your course brief later).
-            </span>
+            <span class="model-info-tip" role="tooltip"></span>
           </span>
         </div>
-        <p class="tagline">Full wheel solid for a spring-powered car project.</p>
+        <p class="tagline">Rear wheel for an engineering-class mouse-trap car—designed lighter than running on a record.</p>
         <button type="button" class="open-viewer"
           data-src="Mouse_Trap_Car_Wheel_Whole.stl.glb"
-          data-title="Mouse trap car wheel"
+          data-title="Mouse Trap Car Wheel"
           data-alt="Mouse trap car wheel (Fusion 360 export)"
           data-orbit="0deg 75deg 105%"
-          data-about="Wheel body for a physics mouse-trap vehicle—balanced rim mass and diameter for straight runs on a gym floor (guess—replace with your course brief later).">
+          data-about="Served as the back wheel of a mouse trap car I built for an engineering class. This wheel was made as a lighter weight alternative to a record."
+          data-ref-src="images/IMG_5994.PNG"
+          data-ref-title="Mouse Trap Car Wheel · reference">
           Open 3D viewer
         </button>
       </article>
@@ -728,21 +743,19 @@
           </svg>
         </div>
         <div class="model-card-head">
-          <h2>CD wheel insert</h2>
+          <h2></h2>
           <span class="model-info-wrap">
             <button type="button" class="model-info-btn" aria-label="About this model"><span aria-hidden="true">i</span></button>
-            <span class="model-info-tip" role="tooltip">
-              Adapter ring sized for a CD so it can spin on a small axle—useful for quick demos where you already have optical-media blanks on hand (guess).
-            </span>
+            <span class="model-info-tip" role="tooltip"></span>
           </span>
         </div>
-        <p class="tagline">Insert sized for CD diameter on an axle.</p>
+        <p class="tagline">CD hub that mounts on a 5 cm dowel axle—built for the mouse-trap car project.</p>
         <button type="button" class="open-viewer"
           data-src="CD_Wheel_Insert.stl.glb"
           data-title="CD wheel insert"
           data-alt="CD wheel insert (Fusion 360 export)"
           data-orbit="0deg 75deg 105%"
-          data-about="Adapter ring sized for a CD so it can spin on a small axle—useful for quick demos where you already have optical-media blanks on hand (guess).">
+          data-about="Insert for CD that would attach to a 5cm dowel rod that could be used as an axel (Made for a Mouse Trap Car Project).">
           Open 3D viewer
         </button>
       </article>
@@ -755,21 +768,19 @@
           </svg>
         </div>
         <div class="model-card-head">
-          <h2>Record wheel insert (half V2)</h2>
+          <h2></h2>
           <span class="model-info-wrap">
             <button type="button" class="model-info-btn" aria-label="About this model"><span aria-hidden="true">i</span></button>
-            <span class="model-info-tip" role="tooltip">
-              Second revision of a split hub insert—tuned so it mates with platter-style geometry without rocking on the axle (guess—adjust after your fit checks).
-            </span>
+            <span class="model-info-tip" role="tooltip"></span>
           </span>
         </div>
-        <p class="tagline">Half-style insert for vinyl-sized rolling prototypes.</p>
+        <p class="tagline">Record hub for a 5 cm dowel axle on the mouse-trap car.</p>
         <button type="button" class="open-viewer"
           data-src="Record_Wheel_Insert_Half_V2.stl.glb"
           data-title="Record wheel insert (half V2)"
           data-alt="Record wheel insert half V2 (Fusion 360 export)"
           data-orbit="0deg 75deg 105%"
-          data-about="Second revision of a split hub insert—tuned so it mates with platter-style geometry without rocking on the axle (guess—adjust after your fit checks).">
+          data-about="Insert for a record that would attach to a 5cm dowel rod that could be used as an axel (Made for a Mouse Trap Car Project). Requires 2, (one per side).">
           Open 3D viewer
         </button>
       </article>
@@ -782,21 +793,19 @@
           </svg>
         </div>
         <div class="model-card-head">
-          <h2>Hinge</h2>
+          <h2></h2>
           <span class="model-info-wrap">
             <button type="button" class="model-info-btn" aria-label="About this model"><span aria-hidden="true">i</span></button>
-            <span class="model-info-tip" role="tooltip">
-              Printable hinge pair for light-duty lids and assemblies—exported to validate pin clearance and sweep before printing (guess).
-            </span>
+            <span class="model-info-tip" role="tooltip"></span>
           </span>
         </div>
-        <p class="tagline">Knuckle hinge for enclosures or articulated parts.</p>
+        <p class="tagline">180° hinge designed for fun to better understand how hinges work.</p>
         <button type="button" class="open-viewer"
           data-src="Hinge.stl.glb"
           data-title="Hinge"
           data-alt="Hinge (Fusion 360 export)"
           data-orbit="0deg 75deg 105%"
-          data-about="Printable hinge pair for light-duty lids and assemblies—exported to validate pin clearance and sweep before printing (guess).">
+          data-about="180 degree hinge created for testing purposes.">
           Open 3D viewer
         </button>
       </article>
@@ -866,7 +875,7 @@
         <button type="button" class="lightbox-close" id="close-ref-image" aria-label="Close reference image">×</button>
       </div>
       <figure class="image-ref-body">
-        <img id="ref-image-img" src="" alt="" width="1280" height="800" decoding="async">
+        <img id="ref-image-img" src="" alt="" decoding="async">
       </figure>
       <div class="image-ref-foot">
         <a id="ref-image-amazon" href="#" target="_blank" rel="noopener noreferrer">Open Amazon listing</a>
@@ -880,6 +889,23 @@
     const refImageDialog = document.getElementById('ref-image-dialog');
     const closeBtn = document.getElementById('close-viewer');
     const closeRefBtn = document.getElementById('close-ref-image');
+
+    /** Card heading + (i) tooltip: sole sources are `data-title` and `data-about` on `.open-viewer`. */
+    function syncGalleryFromOpenViewer() {
+      for (const card of document.querySelectorAll('.model-card')) {
+        const viewerBtn = card.querySelector('.open-viewer');
+        if (!viewerBtn) continue;
+        const titleEl = card.querySelector('.model-card-head h2');
+        if (titleEl && viewerBtn.dataset.title) {
+          titleEl.textContent = viewerBtn.dataset.title;
+        }
+        const tip = card.querySelector('.model-info-tip');
+        if (tip && viewerBtn.dataset.about !== undefined) {
+          tip.textContent = viewerBtn.dataset.about;
+        }
+      }
+    }
+    syncGalleryFromOpenViewer();
 
     let currentRefSrc = '';
     let currentRefTitle = '';

@@ -5,7 +5,7 @@ COPY . .
 # Mirror every *.html under /export (e.g. models/index.html → /export/models/index.html).
 # Also copy *.glb so Fusion/model-viewer assets ship with nested HTML.
 RUN mkdir -p /export && \
-    find . -type f \( -name '*.html' -o -name '*.glb' -o -name '*.png' -o -name '*.jpg' -o -name '*.jpeg' -o -name '*.webp' \) \
+    find . -type f \( -name '*.html' -o -name '*.glb' -o -name '*.png' -o -name '*.PNG' -o -name '*.jpg' -o -name '*.JPG' -o -name '*.jpeg' -o -name '*.webp' \) \
       ! -path './.git/*' \
       -exec sh -c 'd="/export/$(dirname "$1")"; mkdir -p "$d" && cp "$1" "/export/$1"' _ {} \;
 
