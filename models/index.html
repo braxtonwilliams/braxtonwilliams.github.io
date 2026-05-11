@@ -25,7 +25,7 @@
     .page {
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      min-height: 100vh;
     }
 
     .toolbar {
@@ -56,33 +56,1105 @@
       text-decoration: underline;
     }
 
-    .viewer-wrap {
+    .gallery {
+      flex: 1;
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+      gap: 1.25rem;
+      align-items: stretch;
+      padding: 1.5rem 1rem 2.5rem;
+    }
+
+    .model-card {
+      width: 100%;
+      max-width: none;
+      background: linear-gradient(165deg, #1a1f2e 0%, #12151c 100%);
+      border: 1px solid #2a3142;
+      border-radius: 14px;
+      padding: 1.5rem 1.5rem 1.35rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .model-card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.65rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .model-card-head h2 {
+      margin: 0;
+      flex: 1;
+      min-width: 0;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      line-height: 1.25;
+    }
+
+    .model-info-wrap {
+      position: relative;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .model-info-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.45rem;
+      height: 1.45rem;
+      padding: 0;
+      border-radius: 50%;
+      border: 1px solid #64748b;
+      background: rgba(30, 41, 59, 0.95);
+      color: #cbd5e1;
+      font-size: 0.68rem;
+      font-weight: 800;
+      font-style: italic;
+      font-family: Georgia, 'Times New Roman', serif;
+      line-height: 1;
+      cursor: help;
+      transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+    }
+
+    .model-info-btn:hover,
+    .model-info-wrap:focus-within .model-info-btn {
+      border-color: #93c5fd;
+      background: rgba(51, 65, 85, 0.98);
+      color: #f1f5f9;
+    }
+
+    .model-info-tip {
+      position: absolute;
+      right: 0;
+      bottom: calc(100% + 8px);
+      width: min(300px, calc(100vw - 2rem));
+      padding: 0.65rem 0.75rem;
+      font-size: 0.78rem;
+      font-weight: 400;
+      font-style: normal;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      line-height: 1.45;
+      color: #e2e8f0;
+      text-align: left;
+      background: rgba(15, 23, 42, 0.97);
+      border: 1px solid #334155;
+      border-radius: 8px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.16s ease, visibility 0.16s ease;
+      z-index: 60;
+    }
+
+    .model-info-wrap:hover .model-info-tip,
+    .model-info-wrap:focus-within .model-info-tip {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lightbox-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.5rem;
+      width: 100%;
+    }
+
+    .lightbox-title-row #lightbox-title {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .toolbar-info-wrap .model-info-tip {
+      left: auto;
+      right: 0;
+      bottom: auto;
+      top: calc(100% + 8px);
+      width: min(340px, calc(100vw - 3rem));
+    }
+
+    .model-card-preview-placeholder {
+      aspect-ratio: 16 / 10;
+      border-radius: 10px;
+      background: radial-gradient(ellipse 80% 70% at 50% 60%, #2a3548 0%, #0f1117 72%);
+      border: 1px solid #2f3a4d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.85rem;
+    }
+
+    .model-card-preview-placeholder svg {
+      width: 52px;
+      height: 52px;
+      opacity: 0.45;
+      color: #94a3b8;
+    }
+
+    .model-card .tagline {
+      flex: 1;
+      margin: 0 0 0.85rem;
+      font-size: 0.875rem;
+      line-height: 1.45;
+      color: #94a3b8;
+    }
+
+    .model-card .open-viewer {
+      margin-top: auto;
+    }
+
+    /* Per-model reference thumbnail + links: scoped under each .model-card */
+    .ref-thumb-btn {
+      position: relative;
+      display: block;
+      width: 100%;
+      margin: 0 0 0.85rem;
+      padding: 0;
+      border: 1px solid #2f3a4d;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: zoom-in;
+      background: #0f1117;
+      aspect-ratio: 16 / 10;
+    }
+
+    .ref-thumb-btn:focus-visible {
+      outline: 2px solid #60a5fa;
+      outline-offset: 2px;
+    }
+
+    .ref-thumb-btn img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .ref-thumb-label {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 0.45rem 0.6rem 0.4rem;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #f1f5f9;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.82));
+      pointer-events: none;
+      text-align: left;
+    }
+
+    .model-links {
+      list-style: none;
+      margin: 0 0 1rem;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .model-links a {
+      color: #93c5fd;
+      font-size: 0.875rem;
+      text-decoration: underline;
+      text-decoration-color: rgba(147, 197, 253, 0.35);
+      text-underline-offset: 3px;
+    }
+
+    .model-links a:hover {
+      color: #bfdbfe;
+    }
+
+    .link-btn {
+      margin: 0;
+      padding: 0;
+      border: none;
+      background: none;
+      font: inherit;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #93c5fd;
+      cursor: pointer;
+      text-decoration: underline;
+      text-decoration-color: rgba(147, 197, 253, 0.35);
+      text-underline-offset: 3px;
+    }
+
+    .link-btn:hover {
+      color: #bfdbfe;
+    }
+
+    .lightbox-toolbar-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+      width: 100%;
+    }
+
+    .lightbox-toolbar-main {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .lightbox-toolbar-refs {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.35rem 0.65rem;
+      font-size: 0.78rem;
+    }
+
+    .lightbox-toolbar-refs .sep {
+      color: #475569;
+      user-select: none;
+    }
+
+    .lightbox-toolbar-refs a {
+      color: #93c5fd;
+      text-decoration: none;
+    }
+
+    .lightbox-toolbar-refs a:hover {
+      text-decoration: underline;
+    }
+
+    dialog.image-ref-lightbox {
+      margin: auto;
+      padding: 0;
+      border: none;
+      border-radius: 12px;
+      max-width: min(96vw, 920px);
+      max-height: min(92vh, 90vh);
+      background: #0a0c10;
+      color: #e2e8f0;
+      box-shadow: 0 20px 70px rgba(0, 0, 0, 0.65);
+    }
+
+    dialog.image-ref-lightbox::backdrop {
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(5px);
+    }
+
+    .image-ref-panel {
+      display: flex;
+      flex-direction: column;
+      max-height: min(92vh, 90vh);
+    }
+
+    .image-ref-head {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.55rem 0.65rem 0.55rem 0.85rem;
+      border-bottom: 1px solid #222831;
+    }
+
+    .image-ref-head h2 {
+      margin: 0;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .image-ref-body {
+      margin: 0;
+      padding: 0.5rem;
+      overflow: auto;
+      text-align: center;
+      background: #050608;
+    }
+
+    .image-ref-body img {
+      max-width: 100%;
+      height: auto;
+      vertical-align: middle;
+      border-radius: 6px;
+    }
+
+    .image-ref-foot {
+      flex-shrink: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem 1rem;
+      padding: 0.65rem 0.85rem;
+      border-top: 1px solid #222831;
+      font-size: 0.82rem;
+    }
+
+    .image-ref-foot a {
+      color: #93c5fd;
+    }
+
+    .image-ref-foot a:hover {
+      text-decoration: underline;
+    }
+
+    .open-viewer {
+      width: 100%;
+      padding: 0.65rem 1rem;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: #0f172a;
+      background: linear-gradient(180deg, #e2e8f0 0%, #cbd5e1 100%);
+      border: 1px solid #94a3b8;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: filter 0.15s ease, transform 0.12s ease;
+    }
+
+    .open-viewer:hover {
+      filter: brightness(1.06);
+    }
+
+    .open-viewer:active {
+      transform: scale(0.99);
+    }
+
+    dialog.lightbox {
+      margin: auto;
+      padding: 0;
+      border: none;
+      border-radius: 14px;
+      width: min(96vw, 1100px);
+      height: min(90vh, 820px);
+      max-width: 100%;
+      max-height: 100%;
+      background: #0c0e12;
+      color: #e2e8f0;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.65);
+    }
+
+    dialog.lightbox::backdrop {
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(6px);
+    }
+
+    .lightbox-panel {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 0;
+    }
+
+    .lightbox-toolbar {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.65rem 0.75rem 0.65rem 1rem;
+      background: #08090c;
+      border-bottom: 1px solid #222831;
+      border-radius: 14px 14px 0 0;
+    }
+
+    #lightbox-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .lightbox-close {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.25rem;
+      height: 2.25rem;
+      padding: 0;
+      font-size: 1.35rem;
+      line-height: 1;
+      color: #cbd5e1;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .lightbox-close:hover {
+      background: #1e293b;
+      color: #f8fafc;
+    }
+
+    .lightbox-viewer {
       flex: 1;
       min-height: 0;
       position: relative;
+      border-radius: 0 0 14px 14px;
+      overflow: hidden;
     }
 
-    model-viewer {
+    .lightbox-viewer model-viewer {
       width: 100%;
       height: 100%;
+    }
+
+    /* Fusion-style view cube (per viewer — sits above model-viewer in this dialog only) */
+    .view-cube-widget {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 30;
+      width: 96px;
+      height: 96px;
+      pointer-events: none;
+    }
+
+    .view-cube-shell {
+      pointer-events: auto;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+      cursor: grab;
+      border-radius: 8px;
+      background: rgba(8, 10, 14, 0.45);
+      border: 1px solid rgba(71, 85, 105, 0.55);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+    }
+
+    .view-cube-shell:active {
+      cursor: grabbing;
+    }
+
+    .view-cube-scene {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      perspective: 260px;
+      perspective-origin: 52% 42%;
+    }
+
+    .view-cube-pivot {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 0;
+      height: 0;
+      transform-style: preserve-3d;
+      transform: rotateX(-20deg) rotateY(32deg);
+    }
+
+    .view-cube-pivot * {
+      transform-style: preserve-3d;
+    }
+
+    .cube-face {
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: -35px 0 0 -35px;
+      width: 70px;
+      height: 70px;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      background: rgba(30, 41, 59, 0.82);
+      color: #e2e8f0;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      user-select: none;
+      backface-visibility: hidden;
+      padding: 0;
+      font-family: inherit;
+      transition: background 0.12s ease, border-color 0.12s ease;
+    }
+
+    .cube-face:hover {
+      background: rgba(51, 65, 85, 0.92);
+      border-color: rgba(186, 230, 253, 0.55);
+    }
+
+    .cube-face--pz {
+      transform: rotateY(0deg) translateZ(35px);
+    }
+
+    .cube-face--nz {
+      transform: rotateY(180deg) translateZ(35px);
+    }
+
+    .cube-face--px {
+      transform: rotateY(90deg) translateZ(35px);
+    }
+
+    .cube-face--nx {
+      transform: rotateY(-90deg) translateZ(35px);
+    }
+
+    .cube-face--py {
+      transform: rotateX(90deg) translateZ(35px);
+    }
+
+    .cube-face--ny {
+      transform: rotateX(-90deg) translateZ(35px);
+    }
+
+    .cube-corner {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 11px;
+      height: 11px;
+      margin: -5px 0 0 -5px;
+      padding: 0;
+      border: 1px solid rgba(251, 191, 36, 0.65);
+      border-radius: 50%;
+      background: rgba(251, 191, 36, 0.82);
+      cursor: pointer;
+      box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.5);
+      backface-visibility: hidden;
+    }
+
+    .cube-corner:hover {
+      background: rgba(253, 224, 71, 0.95);
+    }
+
+    .cube-edge {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 70px;
+      height: 6px;
+      margin: -3px 0 0 -35px;
+      padding: 0;
+      border: none;
+      border-radius: 2px;
+      background: rgba(148, 163, 184, 0.55);
+      cursor: pointer;
+      backface-visibility: hidden;
+    }
+
+    .cube-edge:hover {
+      background: rgba(203, 213, 225, 0.75);
     }
   </style>
 </head>
 <body>
   <div class="page">
     <header class="toolbar">
-      <h1>Fusion 360 · Bed frame</h1>
+      <h1>Fusion 360 · Models</h1>
       <a href="/">← Back to resume</a>
     </header>
-    <div class="viewer-wrap">
-      <model-viewer
-        src="Bed_Frame.stl.glb"
-        alt="Bed frame 3D model (Fusion 360 export)"
-        auto-rotate
-        camera-controls
-        shadow-intensity="1">
-      </model-viewer>
-    </div>
+
+    <main class="gallery">
+      <article class="model-card">
+        <button type="button" class="ref-thumb-btn js-gallery-ref" id="open-bed-ref-image"
+          data-ref-src="images/Screenshot%202026-05-11%20at%204.45.23%E2%80%AFPM.png"
+          data-ref-title="Bed frame · reference"
+          data-amazon="https://www.amazon.com/dp/B0CN39WWYG?th=1"
+          aria-haspopup="dialog" aria-controls="ref-image-dialog">
+          <img src="images/Screenshot%202026-05-11%20at%204.45.23%E2%80%AFPM.png" alt="Reference screenshot for bed frame design" width="960" height="600" loading="lazy" decoding="async">
+          <span class="ref-thumb-label">Reference image</span>
+        </button>
+        <div class="model-card-head">
+          <h2>Bed frame</h2>
+          <span class="model-info-wrap">
+            <button type="button" class="model-info-btn" aria-label="About this model"><span aria-hidden="true">i</span></button>
+            <span class="model-info-tip" role="tooltip">
+              Modeled to match real-world hardware for a bed upgrade—checking rail spacing, pilot holes, and clearances before committing to metal parts or fasteners (placeholder description—edit anytime).
+            </span>
+          </span>
+        </div>
+        <p class="tagline">Interactive GLB export. Drag to orbit, scroll or pinch to zoom.</p>
+        <ul class="model-links">
+          <li>
+            <a href="https://www.amazon.com/dp/B0CN39WWYG?th=1" target="_blank" rel="noopener noreferrer">Amazon listing (reference)</a>
+          </li>
+        </ul>
+        <button type="button" class="open-viewer"
+          data-src="Bed_Frame_Only.stl.glb"
+          data-title="Bed frame"
+          data-alt="Bed frame 3D model (Fusion 360 export)"
+          data-orbit="0deg 135deg 105%"
+          data-about="Modeled to match real-world hardware for a bed upgrade—checking rail spacing, pilot holes, and clearances before committing to metal parts or fasteners (placeholder description—edit anytime)."
+          data-ref-src="images/Screenshot%202026-05-11%20at%204.45.23%E2%80%AFPM.png"
+          data-ref-title="Bed frame · reference"
+          data-amazon="https://www.amazon.com/dp/B0CN39WWYG?th=1">
+          Open 3D viewer
+        </button>
+      </article>
+
+      <article class="model-card">
+        <div class="model-card-preview-placeholder" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3l9 4.5v9L12 21l-9-4.5v-9L12 3z" />
+            <path d="M12 12l9-4.5M12 12v9M12 12L3 7.5" />
+          </svg>
+        </div>
+        <div class="model-card-head">
+          <h2>Mouse trap car wheel</h2>
+          <span class="model-info-wrap">
+            <button type="button" class="model-info-btn" aria-label="About this model"><span aria-hidden="true">i</span></button>
+            <span class="model-info-tip" role="tooltip">
+              Wheel body for a physics mouse-trap vehicle—balanced rim mass and diameter for straight runs on a gym floor (guess—replace with your course brief later).
+            </span>
+          </span>
+        </div>
+        <p class="tagline">Full wheel solid for a spring-powered car project.</p>
+        <button type="button" class="open-viewer"
+          data-src="Mouse_Trap_Car_Wheel_Whole.stl.glb"
+          data-title="Mouse trap car wheel"
+          data-alt="Mouse trap car wheel (Fusion 360 export)"
+          data-orbit="0deg 75deg 105%"
+          data-about="Wheel body for a physics mouse-trap vehicle—balanced rim mass and diameter for straight runs on a gym floor (guess—replace with your course brief later).">
+          Open 3D viewer
+        </button>
+      </article>
+
+      <article class="model-card">
+        <div class="model-card-preview-placeholder" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3l9 4.5v9L12 21l-9-4.5v-9L12 3z" />
+            <path d="M12 12l9-4.5M12 12v9M12 12L3 7.5" />
+          </svg>
+        </div>
+        <div class="model-card-head">
+          <h2>CD wheel insert</h2>
+          <span class="model-info-wrap">
+            <button type="button" class="model-info-btn" aria-label="About this model"><span aria-hidden="true">i</span></button>
+            <span class="model-info-tip" role="tooltip">
+              Adapter ring sized for a CD so it can spin on a small axle—useful for quick demos where you already have optical-media blanks on hand (guess).
+            </span>
+          </span>
+        </div>
+        <p class="tagline">Insert sized for CD diameter on an axle.</p>
+        <button type="button" class="open-viewer"
+          data-src="CD_Wheel_Insert.stl.glb"
+          data-title="CD wheel insert"
+          data-alt="CD wheel insert (Fusion 360 export)"
+          data-orbit="0deg 75deg 105%"
+          data-about="Adapter ring sized for a CD so it can spin on a small axle—useful for quick demos where you already have optical-media blanks on hand (guess).">
+          Open 3D viewer
+        </button>
+      </article>
+
+      <article class="model-card">
+        <div class="model-card-preview-placeholder" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3l9 4.5v9L12 21l-9-4.5v-9L12 3z" />
+            <path d="M12 12l9-4.5M12 12v9M12 12L3 7.5" />
+          </svg>
+        </div>
+        <div class="model-card-head">
+          <h2>Record wheel insert (half V2)</h2>
+          <span class="model-info-wrap">
+            <button type="button" class="model-info-btn" aria-label="About this model"><span aria-hidden="true">i</span></button>
+            <span class="model-info-tip" role="tooltip">
+              Second revision of a split hub insert—tuned so it mates with platter-style geometry without rocking on the axle (guess—adjust after your fit checks).
+            </span>
+          </span>
+        </div>
+        <p class="tagline">Half-style insert for vinyl-sized rolling prototypes.</p>
+        <button type="button" class="open-viewer"
+          data-src="Record_Wheel_Insert_Half_V2.stl.glb"
+          data-title="Record wheel insert (half V2)"
+          data-alt="Record wheel insert half V2 (Fusion 360 export)"
+          data-orbit="0deg 75deg 105%"
+          data-about="Second revision of a split hub insert—tuned so it mates with platter-style geometry without rocking on the axle (guess—adjust after your fit checks).">
+          Open 3D viewer
+        </button>
+      </article>
+
+      <article class="model-card">
+        <div class="model-card-preview-placeholder" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3l9 4.5v9L12 21l-9-4.5v-9L12 3z" />
+            <path d="M12 12l9-4.5M12 12v9M12 12L3 7.5" />
+          </svg>
+        </div>
+        <div class="model-card-head">
+          <h2>Hinge</h2>
+          <span class="model-info-wrap">
+            <button type="button" class="model-info-btn" aria-label="About this model"><span aria-hidden="true">i</span></button>
+            <span class="model-info-tip" role="tooltip">
+              Printable hinge pair for light-duty lids and assemblies—exported to validate pin clearance and sweep before printing (guess).
+            </span>
+          </span>
+        </div>
+        <p class="tagline">Knuckle hinge for enclosures or articulated parts.</p>
+        <button type="button" class="open-viewer"
+          data-src="Hinge.stl.glb"
+          data-title="Hinge"
+          data-alt="Hinge (Fusion 360 export)"
+          data-orbit="0deg 75deg 105%"
+          data-about="Printable hinge pair for light-duty lids and assemblies—exported to validate pin clearance and sweep before printing (guess).">
+          Open 3D viewer
+        </button>
+      </article>
+    </main>
   </div>
+
+  <dialog class="lightbox" id="viewer-lightbox" aria-labelledby="lightbox-title">
+    <div class="lightbox-panel">
+      <div class="lightbox-toolbar">
+        <div class="lightbox-toolbar-row">
+          <div class="lightbox-toolbar-main">
+            <div class="lightbox-title-row">
+              <span id="lightbox-title">Model</span>
+              <span class="model-info-wrap toolbar-info-wrap">
+                <button type="button" class="model-info-btn" id="viewer-info-btn" aria-label="About this model" aria-describedby="viewer-info-tip">
+                  <span aria-hidden="true">i</span>
+                </button>
+                <span id="viewer-info-tip" class="model-info-tip" role="tooltip"></span>
+              </span>
+            </div>
+            <div class="lightbox-toolbar-refs" id="viewer-toolbar-refs" hidden>
+              <button type="button" class="link-btn js-open-ref-image">Reference image</button>
+              <span class="sep" aria-hidden="true">·</span>
+              <a id="viewer-toolbar-amazon" href="#" target="_blank" rel="noopener noreferrer">Amazon</a>
+            </div>
+          </div>
+          <button type="button" class="lightbox-close" id="close-viewer" aria-label="Close viewer">×</button>
+        </div>
+      </div>
+      <div class="lightbox-viewer">
+        <!-- Per-model framing: edit `camera-orbit` on each card open-viewer button (data-orbit). -->
+        <model-viewer
+          id="viewer-model"
+          src="Bed_Frame_Only.stl.glb"
+          alt="Fusion 360 model"
+          camera-orbit="0deg 75deg 105%"
+          camera-controls
+          shadow-intensity="1"
+          touch-action="none"
+          interaction-prompt="none"
+          disable-pan
+          orbit-sensitivity="0.58"
+          zoom-sensitivity="0.85"
+          interpolation-decay="340">
+        </model-viewer>
+        <div class="view-cube-widget">
+          <div
+            class="view-cube-shell"
+            id="view-cube-shell"
+            role="application"
+            aria-label="View cube. Drag to spin. Click a face, edge, or corner to snap the camera."
+            tabindex="-1"
+          >
+            <div class="view-cube-scene">
+              <div class="view-cube-pivot" id="view-cube-pivot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="image-ref-lightbox" id="ref-image-dialog" aria-labelledby="ref-image-title" aria-modal="true">
+    <div class="image-ref-panel">
+      <div class="image-ref-head">
+        <h2 id="ref-image-title">Reference</h2>
+        <button type="button" class="lightbox-close" id="close-ref-image" aria-label="Close reference image">×</button>
+      </div>
+      <figure class="image-ref-body">
+        <img id="ref-image-img" src="" alt="" width="1280" height="800" decoding="async">
+      </figure>
+      <div class="image-ref-foot">
+        <a id="ref-image-amazon" href="#" target="_blank" rel="noopener noreferrer">Open Amazon listing</a>
+        <a id="ref-image-tab" href="#" target="_blank" rel="noopener noreferrer">Open image in new tab</a>
+      </div>
+    </div>
+  </dialog>
+
+  <script type="module">
+    const viewerDialog = document.getElementById('viewer-lightbox');
+    const refImageDialog = document.getElementById('ref-image-dialog');
+    const closeBtn = document.getElementById('close-viewer');
+    const closeRefBtn = document.getElementById('close-ref-image');
+
+    let currentRefSrc = '';
+    let currentRefTitle = '';
+    let currentAmazonUrl = '';
+
+    function applyViewerModel(btn) {
+      const mv = document.getElementById('viewer-model');
+      mv.src = btn.dataset.src;
+      mv.alt = btn.dataset.alt || '';
+      mv.setAttribute('camera-orbit', btn.dataset.orbit || '0deg 75deg 105%');
+
+      document.getElementById('lightbox-title').textContent = btn.dataset.title || 'Model';
+      document.getElementById('viewer-info-tip').textContent = btn.dataset.about || '';
+
+      const refs = document.getElementById('viewer-toolbar-refs');
+      const amazonA = document.getElementById('viewer-toolbar-amazon');
+      const refSrc = btn.dataset.refSrc;
+
+      if (refSrc) {
+        refs.hidden = false;
+        currentRefSrc = refSrc;
+        currentRefTitle = btn.dataset.refTitle || 'Reference';
+        currentAmazonUrl = btn.dataset.amazon || '';
+        if (currentAmazonUrl) {
+          amazonA.href = currentAmazonUrl;
+          amazonA.hidden = false;
+        } else {
+          amazonA.hidden = true;
+        }
+      } else {
+        refs.hidden = true;
+        currentRefSrc = '';
+        currentRefTitle = '';
+        currentAmazonUrl = '';
+      }
+    }
+
+    function openRefDialog() {
+      if (!currentRefSrc) return;
+      const img = document.getElementById('ref-image-img');
+      img.src = currentRefSrc;
+      img.alt = currentRefTitle;
+      document.getElementById('ref-image-title').textContent = currentRefTitle;
+      document.getElementById('ref-image-tab').href = currentRefSrc;
+
+      const fa = document.getElementById('ref-image-amazon');
+      if (currentAmazonUrl) {
+        fa.href = currentAmazonUrl;
+        fa.hidden = false;
+      } else {
+        fa.hidden = true;
+      }
+      refImageDialog.showModal();
+    }
+
+    for (const btn of document.querySelectorAll('.open-viewer')) {
+      btn.addEventListener('click', () => {
+        applyViewerModel(btn);
+        rebuildViewCubeGeometry();
+        viewerDialog.showModal();
+      });
+    }
+
+    for (const btn of document.querySelectorAll('.js-gallery-ref')) {
+      btn.addEventListener('click', (event) => {
+        event.preventDefault();
+        currentRefSrc = btn.dataset.refSrc || '';
+        currentRefTitle = btn.dataset.refTitle || 'Reference';
+        currentAmazonUrl = btn.dataset.amazon || '';
+        openRefDialog();
+      });
+    }
+
+    function orbitFromDir(dx, dy, dz) {
+      const len = Math.hypot(dx, dy, dz) || 1;
+      const x = dx / len;
+      const y = dy / len;
+      const z = dz / len;
+      const theta = (Math.atan2(x, z) * 180) / Math.PI;
+      let phi = (Math.acos(Math.max(-1, Math.min(1, y))) * 180) / Math.PI;
+      phi = Math.max(10, Math.min(170, phi));
+      return `${theta.toFixed(1)}deg ${phi.toFixed(1)}deg 105%`;
+    }
+
+    let cubeDragX = 0;
+    let cubeDragY = 0;
+    const cubeBaseX = -20;
+    const cubeBaseY = 32;
+
+    function pivotTransform() {
+      const pivot = document.getElementById('view-cube-pivot');
+      if (!pivot) return;
+      pivot.style.transform = `rotateX(${cubeBaseX + cubeDragX}deg) rotateY(${cubeBaseY + cubeDragY}deg)`;
+    }
+
+    function populateViewCubePivot(pivot) {
+      const s = 35;
+      const faces = [
+        { cls: 'cube-face--pz', label: 'F', dir: [0, 0, 1], aria: 'Front' },
+        { cls: 'cube-face--nz', label: 'B', dir: [0, 0, -1], aria: 'Back' },
+        { cls: 'cube-face--px', label: 'R', dir: [1, 0, 0], aria: 'Right' },
+        { cls: 'cube-face--nx', label: 'L', dir: [-1, 0, 0], aria: 'Left' },
+        { cls: 'cube-face--py', label: 'T', dir: [0, 1, 0], aria: 'Top' },
+        { cls: 'cube-face--ny', label: 'Bo', dir: [0, -1, 0], aria: 'Bottom' },
+      ];
+
+      for (const f of faces) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = `cube-face ${f.cls}`;
+        b.textContent = f.label;
+        b.dataset.orbit = orbitFromDir(f.dir[0], f.dir[1], f.dir[2]);
+        b.setAttribute('aria-label', `${f.aria} view`);
+        b.addEventListener('click', (e) => e.stopPropagation());
+        pivot.appendChild(b);
+      }
+
+      for (const sy of [-1, 1]) {
+        for (const sz of [-1, 1]) {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'cube-edge';
+          b.dataset.orbit = orbitFromDir(0, sy, sz);
+          b.setAttribute('aria-label', 'Edge view');
+          b.style.transform = `translate3d(0px, ${sy * s}px, ${sz * s}px)`;
+          b.addEventListener('click', (e) => e.stopPropagation());
+          pivot.appendChild(b);
+        }
+      }
+      for (const sx of [-1, 1]) {
+        for (const sz of [-1, 1]) {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'cube-edge';
+          b.dataset.orbit = orbitFromDir(sx, 0, sz);
+          b.setAttribute('aria-label', 'Edge view');
+          b.style.transform = `translate3d(${sx * s}px, 0px, ${sz * s}px) rotateZ(90deg)`;
+          b.addEventListener('click', (e) => e.stopPropagation());
+          pivot.appendChild(b);
+        }
+      }
+      for (const sx of [-1, 1]) {
+        for (const sy of [-1, 1]) {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'cube-edge';
+          b.dataset.orbit = orbitFromDir(sx, sy, 0);
+          b.setAttribute('aria-label', 'Edge view');
+          b.style.transform = `translate3d(${sx * s}px, ${sy * s}px, 0px) rotateY(90deg)`;
+          b.addEventListener('click', (e) => e.stopPropagation());
+          pivot.appendChild(b);
+        }
+      }
+
+      for (const sx of [-1, 1]) {
+        for (const sy of [-1, 1]) {
+          for (const sz of [-1, 1]) {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'cube-corner';
+            b.dataset.orbit = orbitFromDir(sx, sy, sz);
+            b.setAttribute('aria-label', 'Corner view');
+            b.style.transform = `translate3d(${sx * s}px, ${sy * s}px, ${sz * s}px) scale(1.12)`;
+            b.addEventListener('click', (e) => e.stopPropagation());
+            pivot.appendChild(b);
+          }
+        }
+      }
+    }
+
+    function rebuildViewCubeGeometry() {
+      const pivot = document.getElementById('view-cube-pivot');
+      if (!pivot) return;
+      pivot.innerHTML = '';
+      populateViewCubePivot(pivot);
+      cubeDragX = 0;
+      cubeDragY = 0;
+      pivotTransform();
+    }
+
+    function bindViewCubeShellOnce() {
+      const shell = document.getElementById('view-cube-shell');
+      if (!shell || shell.dataset.bound === '1') return;
+      shell.dataset.bound = '1';
+
+      let dragging = false;
+      let activeId = null;
+      let lastX = 0;
+      let lastY = 0;
+      let totalMove = 0;
+      let pendingHit = null;
+
+      shell.addEventListener('pointerdown', (e) => {
+        if (e.button !== 0) return;
+        pendingHit = e.target.closest('[data-orbit]');
+        dragging = true;
+        activeId = e.pointerId;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        totalMove = 0;
+        shell.setPointerCapture(e.pointerId);
+        e.stopPropagation();
+      });
+
+      shell.addEventListener('pointermove', (e) => {
+        if (!dragging || e.pointerId !== activeId) return;
+        const dx = e.clientX - lastX;
+        const dy = e.clientY - lastY;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        totalMove += Math.hypot(dx, dy);
+        if (totalMove > 5) {
+          pendingHit = null;
+          cubeDragY += dx * 0.42;
+          cubeDragX -= dy * 0.42;
+          pivotTransform();
+        }
+        e.stopPropagation();
+      });
+
+      function endPointer(e) {
+        if (!dragging || e.pointerId !== activeId) return;
+        dragging = false;
+        try {
+          shell.releasePointerCapture(activeId);
+        } catch (_) {
+          /* ignore */
+        }
+        activeId = null;
+        const mv = document.getElementById('viewer-model');
+        if (totalMove <= 5 && pendingHit?.dataset?.orbit && mv) {
+          mv.setAttribute('camera-orbit', pendingHit.dataset.orbit);
+        }
+        pendingHit = null;
+        totalMove = 0;
+        e.stopPropagation();
+      }
+
+      shell.addEventListener('pointerup', endPointer);
+      shell.addEventListener('pointercancel', endPointer);
+
+      shell.addEventListener('dblclick', () => {
+        cubeDragX = 0;
+        cubeDragY = 0;
+        pivotTransform();
+      });
+    }
+
+    bindViewCubeShellOnce();
+
+    closeBtn.addEventListener('click', () => {
+      viewerDialog.close();
+    });
+
+    viewerDialog.addEventListener('click', (event) => {
+      if (event.target === viewerDialog) {
+        viewerDialog.close();
+      }
+    });
+
+    for (const btn of document.querySelectorAll('.js-open-ref-image')) {
+      btn.addEventListener('click', () => {
+        openRefDialog();
+      });
+    }
+
+    closeRefBtn.addEventListener('click', () => {
+      refImageDialog.close();
+    });
+
+    refImageDialog.addEventListener('click', (event) => {
+      if (event.target === refImageDialog) {
+        refImageDialog.close();
+      }
+    });
+  </script>
 </body>
 </html>

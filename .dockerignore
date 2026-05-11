@@ -1,0 +1,12 @@
+.git
+node_modules
+*.md
+Dockerfile
+docker-compose.yml
+docker-compose.yaml
+compose.yml
+compose.yaml
+Makefile
+_config.yml
+CNAME
+.nvmrc
