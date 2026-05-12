@@ -571,16 +571,12 @@
       pointer-events: auto;
       width: 100%;
       height: 100%;
-      touch-action: none;
-      cursor: grab;
+      touch-action: manipulation;
+      cursor: default;
       border-radius: 8px;
       background: rgba(8, 10, 14, 0.45);
       border: 1px solid rgba(71, 85, 105, 0.55);
       box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
-    }
-
-    .view-cube-shell:active {
-      cursor: grabbing;
     }
 
     .view-cube-scene {
@@ -588,7 +584,7 @@
       width: 100%;
       height: 100%;
       perspective: 260px;
-      perspective-origin: 52% 42%;
+      perspective-origin: 50% 50%;
     }
 
     .view-cube-pivot {
@@ -598,7 +594,7 @@
       width: 0;
       height: 0;
       transform-style: preserve-3d;
-      transform: rotateX(-20deg) rotateY(32deg);
+      /* Rotation set from model-viewer camera orbit in JS */
     }
 
     .view-cube-pivot * {
@@ -658,43 +654,110 @@
       transform: rotateX(-90deg) translateZ(35px);
     }
 
-    .cube-corner {
+    /* Outer = vertex on cube; inner = hit target + 3-ring sphere wireframe (readable from any angle). */
+    .cube-spot-outer {
       position: absolute;
       left: 0;
       top: 0;
-      width: 11px;
-      height: 11px;
-      margin: -5px 0 0 -5px;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+      transform-style: preserve-3d;
+    }
+
+    .cube-spot-inner {
+      position: absolute;
+      left: 0;
+      top: 0;
+      pointer-events: auto;
+      transform-style: preserve-3d;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      cursor: pointer;
       padding: 0;
-      border: 1px solid rgba(251, 191, 36, 0.65);
+      overflow: visible;
+      font-family: inherit;
+    }
+
+    .cube-sphere {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 0;
+      height: 0;
+      transform-style: preserve-3d;
+    }
+
+    .cube-sphere-ring {
+      position: absolute;
+      left: 0;
+      top: 0;
+      box-sizing: border-box;
       border-radius: 50%;
-      background: rgba(251, 191, 36, 0.82);
-      cursor: pointer;
-      box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.5);
-      backface-visibility: hidden;
+      border-style: solid;
+      border-width: 1.5px;
+      background: transparent;
+      pointer-events: auto;
+      transform-style: preserve-3d;
+      backface-visibility: visible;
+      -webkit-backface-visibility: visible;
     }
 
-    .cube-corner:hover {
-      background: rgba(253, 224, 71, 0.95);
+    .cube-sphere-ring--xy {
+      transform: translate(-50%, -50%);
     }
 
-    .cube-edge {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 70px;
-      height: 6px;
-      margin: -3px 0 0 -35px;
-      padding: 0;
-      border: none;
-      border-radius: 2px;
-      background: rgba(148, 163, 184, 0.55);
-      cursor: pointer;
-      backface-visibility: hidden;
+    .cube-sphere-ring--xz {
+      transform: translate(-50%, -50%) rotateX(90deg);
     }
 
-    .cube-edge:hover {
-      background: rgba(203, 213, 225, 0.75);
+    .cube-sphere-ring--yz {
+      transform: translate(-50%, -50%) rotateY(90deg);
+    }
+
+    .cube-spot-inner.cube-corner .cube-sphere-ring {
+      width: 13px;
+      height: 13px;
+      border-color: rgba(251, 191, 36, 0.88);
+      box-shadow:
+        inset 0 0 2px rgba(254, 243, 199, 0.35),
+        0 1px 4px rgba(0, 0, 0, 0.45);
+    }
+
+    .cube-spot-inner.cube-corner:hover .cube-sphere-ring {
+      border-color: rgba(253, 224, 71, 0.98);
+      box-shadow:
+        inset 0 0 3px rgba(255, 251, 235, 0.45),
+        0 2px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    .cube-spot-inner.cube-edge .cube-sphere-ring {
+      width: 15px;
+      height: 15px;
+      border-color: rgba(148, 163, 184, 0.92);
+      box-shadow:
+        inset 0 0 2px rgba(241, 245, 249, 0.25),
+        0 1px 4px rgba(0, 0, 0, 0.42);
+    }
+
+    .cube-spot-inner.cube-edge:hover .cube-sphere-ring {
+      border-color: rgba(203, 213, 225, 0.98);
+      box-shadow:
+        inset 0 0 3px rgba(255, 255, 255, 0.35),
+        0 2px 6px rgba(0, 0, 0, 0.48);
+    }
+
+    .cube-spot-inner.cube-corner {
+      width: 15px;
+      height: 15px;
+      margin: -7px 0 0 -7px;
+    }
+
+    .cube-spot-inner.cube-edge {
+      width: 17px;
+      height: 17px;
+      margin: -8px 0 0 -8px;
     }
   </style>
 </head>
@@ -706,7 +769,7 @@
     </header>
 
     <main class="gallery">
-      <!-- Per model: title, about, and CAD tool come from `.open-viewer` (`data-title`, `data-about`, `data-software`; default software is Fusion 360). -->
+      <!-- Per model: `data-glb` is the viewer asset; title/about/software from `data-*` on `.open-viewer`. -->
       <article class="model-card">
         <button type="button" class="ref-thumb-btn js-gallery-ref" id="open-bed-ref-image"
           data-ref-src="images/Screenshot%202026-05-11%20at%204.45.23%E2%80%AFPM.png"
@@ -731,11 +794,10 @@
         </ul>
         <p class="model-software"></p>
         <button type="button" class="open-viewer"
-          data-src="Bed_Frame_Only.stl.glb"
+          data-glb="Bed_Frame_Only.stl.glb"
           data-title="Bed frame"
           data-alt="Bed frame 3D model (Fusion 360 export)"
           data-software="Fusion 360"
-          data-orbit="0deg 135deg 105%"
           data-about="Modeled based upon my current bed, with the intent to recrease all items in my bedroom to scale and 3D print them minuturized to put in a mini version of my bedroom and sit on my shelf."
           data-ref-src="images/Screenshot%202026-05-11%20at%204.45.23%E2%80%AFPM.png"
           data-ref-title="Bed frame · reference"
@@ -762,11 +824,10 @@
         <p class="tagline">Rear wheel for an engineering-class mouse-trap car—designed lighter than running on a record.</p>
         <p class="model-software"></p>
         <button type="button" class="open-viewer"
-          data-src="Mouse_Trap_Car_Wheel_Whole.stl.glb"
+          data-glb="Mouse_Trap_Car_Wheel_Whole.stl.glb"
           data-title="Mouse Trap Car Wheel"
           data-alt="Mouse trap car wheel (Fusion 360 export)"
           data-software="Fusion 360"
-          data-orbit="0deg 75deg 105%"
           data-about="Served as the back wheel of a mouse trap car I built for an engineering class. This wheel was made as a lighter weight alternative to a record."
           data-ref-src="images/IMG_5994.PNG"
           data-ref-title="Mouse Trap Car Wheel · reference">
@@ -791,11 +852,10 @@
         <p class="tagline">CD hub that mounts on a 5 cm dowel axle—built for the mouse-trap car project.</p>
         <p class="model-software"></p>
         <button type="button" class="open-viewer"
-          data-src="CD_Wheel_Insert.stl.glb"
+          data-glb="CD_Wheel_Insert.stl.glb"
           data-title="CD wheel insert"
           data-alt="CD wheel insert (Fusion 360 export)"
           data-software="Fusion 360"
-          data-orbit="0deg 75deg 105%"
           data-about="Insert for CD that would attach to a 5cm dowel rod that could be used as an axel (Made for a Mouse Trap Car Project).">
           Open 3D viewer
         </button>
@@ -818,11 +878,10 @@
         <p class="tagline">Record hub for a 5 cm dowel axle on the mouse-trap car.</p>
         <p class="model-software"></p>
         <button type="button" class="open-viewer"
-          data-src="Record_Wheel_Insert_Half_V2.stl.glb"
+          data-glb="Record_Wheel_Insert_Half_V2.stl.glb"
           data-title="Record wheel insert (half V2)"
           data-alt="Record wheel insert half V2 (Fusion 360 export)"
           data-software="Fusion 360"
-          data-orbit="0deg 75deg 105%"
           data-about="Insert for a record that would attach to a 5cm dowel rod that could be used as an axel (Made for a Mouse Trap Car Project). Requires 2, (one per side).">
           Open 3D viewer
         </button>
@@ -845,11 +904,10 @@
         <p class="tagline">180° hinge designed for fun to better understand how hinges work.</p>
         <p class="model-software"></p>
         <button type="button" class="open-viewer"
-          data-src="Hinge.stl.glb"
+          data-glb="Hinge.stl.glb"
           data-title="Hinge"
           data-alt="Hinge (Fusion 360 export)"
           data-software="Fusion 360"
-          data-orbit="0deg 75deg 105%"
           data-about="180 degree hinge created for testing purposes.">
           Open 3D viewer
         </button>
@@ -872,10 +930,9 @@
         <p class="tagline">Eyewear frame modeled for printing or display.</p>
         <p class="model-software"></p>
         <button type="button" class="open-viewer"
-          data-src="Glasses.stl.glb"
+          data-glb="Glasses.stl.glb"
           data-title="Glasses"
           data-alt="Glasses (Inventor export)"
-          data-orbit="0deg 75deg 105%"
           data-software="Inventor Pro"
           data-about="Glasses frame modeled in Autodesk Inventor Pro (edit this description to match your project).">
           Open 3D viewer
@@ -908,12 +965,12 @@
         </div>
       </div>
       <div class="lightbox-viewer">
-        <!-- Per-model framing: edit `camera-orbit` on each card open-viewer button (data-orbit). -->
+        <!-- No default `src` / `orientation` on model-viewer: the bed-only euler was hiding other GLBs; each open sets `src` (and orientation only for the bed). -->
         <model-viewer
           id="viewer-model"
-          src="Bed_Frame_Only.stl.glb"
-          alt="Fusion 360 model"
-          camera-orbit="0deg 75deg 105%"
+          alt=""
+          loading="eager"
+          camera-orbit="45.0deg 54.7deg 105%"
           camera-controls
           shadow-intensity="1"
           touch-action="none"
@@ -928,7 +985,7 @@
             class="view-cube-shell"
             id="view-cube-shell"
             role="application"
-            aria-label="View cube. Drag to spin. Click a face, edge, or corner to snap the camera."
+            aria-label="View cube. Click a face, edge, or corner to aim the camera. Double-click to reset. Drag the model to orbit."
             tabindex="-1"
           >
             <div class="view-cube-scene">
@@ -962,6 +1019,28 @@
     const closeBtn = document.getElementById('close-viewer');
     const closeRefBtn = document.getElementById('close-ref-image');
 
+    await customElements.whenDefined('model-viewer');
+
+    /**
+     * Default camera: same as the view-cube corner at top + front + right.
+     * Widget indices (see `populateViewCubePivot`): sx=+1 (R), sy=-1 (T in world +Y), sz=+1 (F) → `orbitFromCubeWidget(1, -1, 1)`.
+     */
+    const DEFAULT_VIEWER_ORBIT = '45.0deg 54.7deg 105%';
+
+    /** Bed GLB mesh is inverted vs viewer axes; model euler only (camera-orbit unchanged). */
+    /** model-viewer 4: orientation is roll pitch yaw → Euler(pitch,yaw,roll,'YXZ'). Bed: 180° X (upright) + 90° X so mattress top is +Y, not the headboard front. */
+    const BED_FRAME_MODEL_SRC = 'Bed_Frame_Only.stl.glb';
+
+    /**
+     * model-viewer θ/φ in degrees for the Front face orbit (+Z toward camera). The view-cube pivot is
+     * identity at this pose; any other camera orbit rotates the gizmo so it matches the model (including
+     * the default top+front+right corner).
+     */
+    const CUBE_GIZMO_REF_DEG = { thetaDeg: 0, phiDeg: 90 };
+
+    /** Orbit string to restore on view-cube double-click (set when opening the viewer). */
+    let viewerOrbitReset = DEFAULT_VIEWER_ORBIT;
+
     /** Card heading, (i) tooltip, CAD line: from `data-title`, `data-about`, `data-software` on `.open-viewer` (software defaults to Fusion 360 if omitted). */
     function syncGalleryFromOpenViewer() {
       for (const card of document.querySelectorAll('.model-card')) {
@@ -993,24 +1072,118 @@
     let currentRefTitle = '';
     let currentAmazonUrl = '';
 
-    function applyViewerModel(btn) {
-      const mv = document.getElementById('viewer-model');
-      mv.src = btn.dataset.src;
-      mv.alt = btn.dataset.alt || '';
-      mv.setAttribute('camera-orbit', btn.dataset.orbit || '0deg 75deg 105%');
+    async function waitForModelViewerUpdate(mv) {
+      const u = mv?.updateComplete;
+      if (u instanceof Promise) {
+        await u;
+      }
+      await new Promise((r) => requestAnimationFrame(r));
+    }
 
-      document.getElementById('lightbox-title').textContent = btn.dataset.title || 'Model';
-      document.getElementById('viewer-info-tip').textContent = btn.dataset.about || '';
+    async function waitForModelViewerLoad(mv) {
+      await new Promise((resolve) => {
+        const fin = () => resolve();
+        mv.addEventListener('load', fin, { once: true });
+        mv.addEventListener('error', fin, { once: true });
+        setTimeout(fin, 15000);
+      });
+    }
+
+    /** `camera-change` does not bubble; keep a listener on whichever `#viewer-model` is mounted. */
+    let viewerCameraAbort = null;
+
+    function attachViewerCameraListener(mv) {
+      if (!mv) {
+        return;
+      }
+      if (viewerCameraAbort) {
+        viewerCameraAbort.abort();
+      }
+      viewerCameraAbort = new AbortController();
+      mv.addEventListener(
+        'camera-change',
+        () => {
+          if (!viewerDialog.open) return;
+          syncViewCubePivotFromViewer();
+        },
+        { signal: viewerCameraAbort.signal },
+      );
+    }
+
+    /**
+     * Replace `<model-viewer>` so internal ModelScene / in-flight loads cannot resurrect a previous mesh.
+     * Clearing `src` alone does not cancel an async `setSource()` already awaiting the loader (bed can win).
+     */
+    function remountViewerModelViewer() {
+      const old = document.getElementById('viewer-model');
+      if (!old?.parentNode) {
+        return null;
+      }
+      const next = document.createElement('model-viewer');
+      for (const attr of old.attributes) {
+        if (attr.name === 'src' || attr.name === 'orientation') {
+          continue;
+        }
+        next.setAttribute(attr.name, attr.value);
+      }
+      old.replaceWith(next);
+      attachViewerCameraListener(next);
+      return next;
+    }
+
+    async function applyViewerModel(btn) {
+      const modelRel = btn.getAttribute('data-glb') || '';
+      if (!modelRel) {
+        return;
+      }
+      const mv = remountViewerModelViewer();
+      if (!mv) {
+        return;
+      }
+      const isBed =
+        modelRel === BED_FRAME_MODEL_SRC || modelRel.endsWith(`/${BED_FRAME_MODEL_SRC}`);
+      // model-viewer only calls $updateSource when `this.src !== scene.url`; without a fresh
+      // URL string, switching e.g. bed → glasses can skip reload and keep the previous mesh.
+      const modelUrlObj = new URL(modelRel, window.location.href);
+      modelUrlObj.searchParams.set('_mv', String(performance.now()));
+      const modelUrl = modelUrlObj.href;
+
+      mv.removeAttribute('orientation');
+      mv.removeAttribute('src');
+      mv.src = null;
+      await waitForModelViewerUpdate(mv);
+
+      if (isBed) {
+        mv.setAttribute('orientation', '0deg 270deg 0deg');
+        await waitForModelViewerUpdate(mv);
+      }
+
+      mv.src = modelUrl;
+      mv.setAttribute('src', modelUrl);
+      await waitForModelViewerUpdate(mv);
+      await waitForModelViewerLoad(mv);
+
+      if (!isBed) {
+        mv.removeAttribute('orientation');
+        await waitForModelViewerUpdate(mv);
+      }
+
+      mv.alt = btn.getAttribute('data-alt') || '';
+      viewerOrbitReset = btn.getAttribute('data-orbit') || DEFAULT_VIEWER_ORBIT;
+      applyOrbitStringSnap(mv, viewerOrbitReset);
+
+      document.getElementById('lightbox-title').textContent = btn.getAttribute('data-title') || 'Model';
+      document.getElementById('viewer-info-tip').textContent = btn.getAttribute('data-about') || '';
 
       const refs = document.getElementById('viewer-toolbar-refs');
       const amazonA = document.getElementById('viewer-toolbar-amazon');
-      const refSrc = btn.dataset.refSrc;
+      const refSrc = btn.getAttribute('data-ref-src');
 
       if (refSrc) {
         refs.hidden = false;
         currentRefSrc = refSrc;
-        currentRefTitle = btn.dataset.refTitle || 'Reference';
-        currentAmazonUrl = btn.dataset.amazon || '';
+        currentRefTitle = btn.getAttribute('data-ref-title') || 'Reference';
+        currentAmazonUrl = btn.getAttribute('data-amazon') || '';
         if (currentAmazonUrl) {
           amazonA.href = currentAmazonUrl;
           amazonA.hidden = false;
@@ -1043,13 +1216,15 @@
       refImageDialog.showModal();
     }
 
-    for (const btn of document.querySelectorAll('.open-viewer')) {
-      btn.addEventListener('click', () => {
-        applyViewerModel(btn);
-        rebuildViewCubeGeometry();
-        viewerDialog.showModal();
-      });
-    }
+    document.querySelector('main.gallery')?.addEventListener('click', async (e) => {
+      const btn = e.target.closest('button.open-viewer');
+      if (!btn || !btn.getAttribute('data-glb')) return;
+      viewerDialog.showModal();
+      await new Promise(requestAnimationFrame);
+      await applyViewerModel(btn);
+      rebuildViewCubeGeometry();
+      syncViewCubePivotFromViewer();
+    });
 
     for (const btn of document.querySelectorAll('.js-gallery-ref')) {
       btn.addEventListener('click', (event) => {
@@ -1072,15 +1247,79 @@
       return `${theta.toFixed(1)}deg ${phi.toFixed(1)}deg 105%`;
     }
 
-    let cubeDragX = 0;
-    let cubeDragY = 0;
-    const cubeBaseX = -20;
-    const cubeBaseY = 32;
+    /**
+     * Edge/corner controls use translate3d(..., sy, ...) in CSS 3D space where Y grows downward on screen.
+     * model-viewer spherical orbits use Three.js Y-up. Flip the vertical index so “screen-up” controls
+     * aim the camera from above the model, not below.
+     */
+    function orbitFromCubeWidget(sx, sy, sz) {
+      return orbitFromDir(sx, -sy, sz);
+    }
 
-    function pivotTransform() {
+    /** Aim the camera; view-cube pivot syncs vs fixed world front (CUBE_GIZMO_REF_DEG). */
+    function applyOrbitStringSnap(mv, orbitStr) {
+      mv.setAttribute('camera-orbit', orbitStr);
+      syncViewCubePivotFromViewer();
+    }
+
+    function readOrbitDegreesFromViewer(mv) {
+      if (typeof mv.getCameraOrbit !== 'function') {
+        return { thetaDeg: 0, phiDeg: 75 };
+      }
+      try {
+        const o = mv.getCameraOrbit();
+        return {
+          thetaDeg: (o.theta * 180) / Math.PI,
+          phiDeg: (o.phi * 180) / Math.PI,
+        };
+      } catch (_) {
+        return { thetaDeg: 0, phiDeg: 75 };
+      }
+    }
+
+    /** Shortest signed θ difference in degrees, range (-180, 180]. */
+    function wrapDeltaThetaDeg(curDeg, refDeg) {
+      let d = curDeg - refDeg;
+      d = ((((d + 180) % 360) + 360) % 360) - 180;
+      return d;
+    }
+
+    function syncViewCubePivotFromViewer() {
       const pivot = document.getElementById('view-cube-pivot');
-      if (!pivot) return;
-      pivot.style.transform = `rotateX(${cubeBaseX + cubeDragX}deg) rotateY(${cubeBaseY + cubeDragY}deg)`;
+      const mv = document.getElementById('viewer-model');
+      if (!pivot || !mv || typeof mv.getCameraOrbit !== 'function') return;
+      try {
+        const cur = readOrbitDegreesFromViewer(mv);
+        const ref = CUBE_GIZMO_REF_DEG;
+        const rx = cur.phiDeg - ref.phiDeg;
+        const ry = -wrapDeltaThetaDeg(cur.thetaDeg, ref.thetaDeg);
+        pivot.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+      } catch (_) {
+        /* model may not be ready */
+      }
+    }
+
+    function appendCubeHotspot(pivot, outerTransform, innerClass, orbitStr, ariaLabel) {
+      const outer = document.createElement('span');
+      outer.className = 'cube-spot-outer';
+      outer.style.transform = outerTransform;
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = `${innerClass} cube-spot-inner`;
+      b.dataset.orbit = orbitStr;
+      b.setAttribute('aria-label', ariaLabel);
+
+      const sphere = document.createElement('span');
+      sphere.className = 'cube-sphere';
+      for (const ringCls of ['cube-sphere-ring--xy', 'cube-sphere-ring--xz', 'cube-sphere-ring--yz']) {
+        const ring = document.createElement('span');
+        ring.className = `cube-sphere-ring ${ringCls}`;
+        ring.setAttribute('aria-hidden', 'true');
+        sphere.appendChild(ring);
+      }
+      b.appendChild(sphere);
+      outer.appendChild(b);
+      pivot.appendChild(outer);
     }
 
     function populateViewCubePivot(pivot) {
@@ -1101,58 +1340,54 @@
         b.textContent = f.label;
         b.dataset.orbit = orbitFromDir(f.dir[0], f.dir[1], f.dir[2]);
         b.setAttribute('aria-label', `${f.aria} view`);
-        b.addEventListener('click', (e) => e.stopPropagation());
         pivot.appendChild(b);
       }
 
       for (const sy of [-1, 1]) {
         for (const sz of [-1, 1]) {
-          const b = document.createElement('button');
-          b.type = 'button';
-          b.className = 'cube-edge';
-          b.dataset.orbit = orbitFromDir(0, sy, sz);
-          b.setAttribute('aria-label', 'Edge view');
-          b.style.transform = `translate3d(0px, ${sy * s}px, ${sz * s}px)`;
-          b.addEventListener('click', (e) => e.stopPropagation());
-          pivot.appendChild(b);
+          appendCubeHotspot(
+            pivot,
+            `translate3d(0px, ${sy * s}px, ${sz * s}px)`,
+            'cube-edge',
+            orbitFromCubeWidget(0, sy, sz),
+            'Edge view',
+          );
         }
       }
       for (const sx of [-1, 1]) {
         for (const sz of [-1, 1]) {
-          const b = document.createElement('button');
-          b.type = 'button';
-          b.className = 'cube-edge';
-          b.dataset.orbit = orbitFromDir(sx, 0, sz);
-          b.setAttribute('aria-label', 'Edge view');
-          b.style.transform = `translate3d(${sx * s}px, 0px, ${sz * s}px) rotateZ(90deg)`;
-          b.addEventListener('click', (e) => e.stopPropagation());
-          pivot.appendChild(b);
+          appendCubeHotspot(
+            pivot,
+            `translate3d(${sx * s}px, 0px, ${sz * s}px) rotateZ(90deg)`,
+            'cube-edge',
+            orbitFromDir(sx, 0, sz),
+            'Edge view',
+          );
         }
       }
       for (const sx of [-1, 1]) {
         for (const sy of [-1, 1]) {
-          const b = document.createElement('button');
-          b.type = 'button';
-          b.className = 'cube-edge';
-          b.dataset.orbit = orbitFromDir(sx, sy, 0);
-          b.setAttribute('aria-label', 'Edge view');
-          b.style.transform = `translate3d(${sx * s}px, ${sy * s}px, 0px) rotateY(90deg)`;
-          b.addEventListener('click', (e) => e.stopPropagation());
-          pivot.appendChild(b);
+          appendCubeHotspot(
+            pivot,
+            `translate3d(${sx * s}px, ${sy * s}px, 0px) rotateY(90deg)`,
+            'cube-edge',
+            orbitFromCubeWidget(sx, sy, 0),
+            'Edge view',
+          );
         }
       }
 
       for (const sx of [-1, 1]) {
         for (const sy of [-1, 1]) {
           for (const sz of [-1, 1]) {
-            const b = document.createElement('button');
-            b.type = 'button';
-            b.className = 'cube-corner';
-            b.dataset.orbit = orbitFromDir(sx, sy, sz);
-            b.setAttribute('aria-label', 'Corner view');
-            b.style.transform = `translate3d(${sx * s}px, ${sy * s}px, ${sz * s}px) scale(1.12)`;
-            b.addEventListener('click', (e) => e.stopPropagation());
-            pivot.appendChild(b);
+            /* (sx=+1, sy=-1, sz=+1) = top + front + right (world +X,+Y,+Z); matches DEFAULT_VIEWER_ORBIT. */
+            appendCubeHotspot(
+              pivot,
+              `translate3d(${sx * s}px, ${sy * s}px, ${sz * s}px)`,
+              'cube-corner',
+              orbitFromCubeWidget(sx, sy, sz),
+              'Corner view',
+            );
           }
         }
       }
@@ -1163,9 +1398,7 @@
       if (!pivot) return;
       pivot.innerHTML = '';
       populateViewCubePivot(pivot);
-      cubeDragX = 0;
-      cubeDragY = 0;
-      pivotTransform();
+      syncViewCubePivotFromViewer();
     }
 
     function bindViewCubeShellOnce() {
@@ -1173,66 +1406,24 @@
       if (!shell || shell.dataset.bound === '1') return;
       shell.dataset.bound = '1';
 
-      let dragging = false;
-      let activeId = null;
-      let lastX = 0;
-      let lastY = 0;
-      let totalMove = 0;
-      let pendingHit = null;
-
-      shell.addEventListener('pointerdown', (e) => {
-        if (e.button !== 0) return;
-        pendingHit = e.target.closest('[data-orbit]');
-        dragging = true;
-        activeId = e.pointerId;
-        lastX = e.clientX;
-        lastY = e.clientY;
-        totalMove = 0;
-        shell.setPointerCapture(e.pointerId);
-        e.stopPropagation();
-      });
-
-      shell.addEventListener('pointermove', (e) => {
-        if (!dragging || e.pointerId !== activeId) return;
-        const dx = e.clientX - lastX;
-        const dy = e.clientY - lastY;
-        lastX = e.clientX;
-        lastY = e.clientY;
-        totalMove += Math.hypot(dx, dy);
-        if (totalMove > 5) {
-          pendingHit = null;
-          cubeDragY += dx * 0.42;
-          cubeDragX -= dy * 0.42;
-          pivotTransform();
-        }
-        e.stopPropagation();
-      });
-
-      function endPointer(e) {
-        if (!dragging || e.pointerId !== activeId) return;
-        dragging = false;
-        try {
-          shell.releasePointerCapture(activeId);
-        } catch (_) {
-          /* ignore */
-        }
-        activeId = null;
-        const mv = document.getElementById('viewer-model');
-        if (totalMove <= 5 && pendingHit?.dataset?.orbit && mv) {
-          mv.setAttribute('camera-orbit', pendingHit.dataset.orbit);
-        }
-        pendingHit = null;
-        totalMove = 0;
-        e.stopPropagation();
-      }
-
-      shell.addEventListener('pointerup', endPointer);
-      shell.addEventListener('pointercancel', endPointer);
+      shell.addEventListener(
+        'click',
+        (e) => {
+          const hit = e.target.closest('[data-orbit]');
+          if (!hit?.dataset?.orbit) return;
+          const mv = document.getElementById('viewer-model');
+          if (!mv) return;
+          e.stopPropagation();
+          applyOrbitStringSnap(mv, hit.dataset.orbit);
+        },
+        true,
+      );
 
       shell.addEventListener('dblclick', () => {
-        cubeDragX = 0;
-        cubeDragY = 0;
-        pivotTransform();
+        const mv = document.getElementById('viewer-model');
+        if (mv) {
+          applyOrbitStringSnap(mv, viewerOrbitReset);
+        }
       });
     }
 
