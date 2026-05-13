@@ -2,6 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script>
+    (function () {
+      try {
+        var s = localStorage.getItem('brax10-theme');
+        if (s === 'light') {
+          document.documentElement.classList.remove('dark');
+        } else {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (e) {
+        try {
+          document.documentElement.classList.add('dark');
+        } catch (e2) {}
+      }
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <script type="module"
@@ -16,9 +32,14 @@
 
     body {
       margin: 0;
-      background: #111;
+      background: #f8fafc;
       min-height: 100vh;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color: #0f172a;
+    }
+
+    html.dark body {
+      background: #020617 !important;
       color: #e2e8f0;
     }
 
@@ -28,15 +49,63 @@
       min-height: 100vh;
     }
 
-    .toolbar {
+    /* Match resume hero: blue-forward gradient (avoid near-black slate stops). */
+    .models-site-header {
+      position: relative;
+      overflow: hidden;
       flex-shrink: 0;
+      background: #1e3a8a;
+      color: #f8fafc;
+    }
+
+    .models-header-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .models-header-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom right, #2563eb 0%, #1d4ed8 40%, #1e40af 70%, #1e3a8a 100%);
+      opacity: 0.96;
+    }
+
+    .models-header-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(48px);
+    }
+
+    .models-header-orb--left {
+      width: 14rem;
+      height: 14rem;
+      left: -5rem;
+      top: 2.5rem;
+      background: rgba(59, 130, 246, 0.2);
+    }
+
+    .models-header-orb--right {
+      width: 18rem;
+      height: 18rem;
+      right: -2rem;
+      top: -1rem;
+      background: rgba(34, 211, 238, 0.1);
+    }
+
+    .toolbar {
+      position: relative;
+      z-index: 10;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
-      padding: 0.75rem 1rem;
-      background: #0a0a0a;
-      border-bottom: 1px solid #222;
+      padding: 0.75rem clamp(1rem, 4vw, 2rem);
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+      background: transparent;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .toolbar h1 {
@@ -44,16 +113,19 @@
       font-size: 1rem;
       font-weight: 600;
       letter-spacing: 0.02em;
+      color: #f8fafc;
     }
 
     .toolbar a {
-      color: #93c5fd;
+      color: #bfdbfe;
       text-decoration: none;
       font-size: 0.875rem;
     }
 
     .toolbar a:hover {
+      color: #fff;
       text-decoration: underline;
+      text-decoration-color: rgba(255, 255, 255, 0.35);
     }
 
     .gallery {
@@ -96,6 +168,11 @@
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
       display: flex;
       flex-direction: column;
+    }
+
+    html.dark .model-card {
+      border-color: #3d4d64;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
 
     .model-card-head {
@@ -763,9 +840,16 @@
 </head>
 <body>
   <div class="page">
-    <header class="toolbar">
-      <h1>Fusion 360 · Models</h1>
-      <a href="/">← Back to resume</a>
+    <header class="models-site-header">
+      <div class="models-header-bg" aria-hidden="true">
+        <div class="models-header-gradient"></div>
+        <div class="models-header-orb models-header-orb--left"></div>
+        <div class="models-header-orb models-header-orb--right"></div>
+      </div>
+      <div class="toolbar">
+        <h1>Fusion 360 · Models</h1>
+        <a href="/">← Back to resume</a>
+      </div>
     </header>
 
     <main class="gallery">

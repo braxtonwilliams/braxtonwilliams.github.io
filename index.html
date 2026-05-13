@@ -2,6 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
+    <script>
+        (function () {
+            try {
+                var s = localStorage.getItem('brax10-theme');
+                if (s === 'light') {
+                    document.documentElement.classList.remove('dark');
+                } else {
+                    document.documentElement.classList.add('dark');
+                }
+            } catch (e) {
+                try {
+                    document.documentElement.classList.add('dark');
+                } catch (e2) {}
+            }
+        })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Braxton Williams | Aspiring Software Developer</title>
     <meta
@@ -12,6 +28,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -124,6 +141,25 @@
                 padding: 0.22in 0.26in !important;
                 box-shadow: none !important;
                 border: 1px solid #e2e8f0 !important;
+                background: #ffffff !important;
+            }
+
+            html.dark section.resume-section h2,
+            html.dark section.resume-section h3,
+            html.dark section.resume-section p,
+            html.dark section.resume-section li,
+            html.dark section.resume-section span,
+            html.dark section.resume-section a {
+                color: #0f172a !important;
+            }
+
+            html.dark section.resume-section .text-brand-600 {
+                color: #1d4ed8 !important;
+            }
+
+            html.dark section.resume-section .rounded-2xl {
+                background: #f8fafc !important;
+                border-color: #e2e8f0 !important;
             }
 
             section.resume-section h2 {
@@ -178,17 +214,63 @@
                 display: none !important;
             }
         }
+
+        .theme-pill[aria-pressed='true'] {
+            background: #d97706;
+            color: #ffffff;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);
+        }
+
+        .theme-pill[aria-pressed='false'] {
+            background: transparent;
+            color: #78350f;
+        }
+
+        .theme-pill[aria-pressed='false']:hover {
+            background: rgba(251, 191, 36, 0.45);
+            color: #451a03;
+        }
+
+        @media screen {
+            /* Dark mode: explicit page + card backgrounds (Tailwind CDN can miss class-based dark if config order fails). */
+            html.dark body {
+                background-color: #020617 !important;
+            }
+
+            html.dark section.resume-section {
+                background-color: #0f172a !important;
+                box-shadow:
+                    0 0 0 1px rgb(51 65 85),
+                    0 10px 30px rgba(0, 0, 0, 0.35) !important;
+            }
+
+            html.dark section.resume-section .rounded-2xl.border.border-slate-200.bg-slate-50,
+            html.dark section.resume-section .rounded-2xl.border.border-slate-200.bg-white {
+                background-color: rgba(30 41 59 / 0.72) !important;
+                border-color: rgb(71 85 105) !important;
+            }
+
+            html.dark section.resume-section .experience-print-trim.rounded-2xl {
+                background-color: rgba(30 41 59 / 0.72) !important;
+                border-color: rgb(71 85 105) !important;
+            }
+
+            html.dark section.resume-section span.rounded-full.bg-brand-50 {
+                background-color: rgba(30, 64, 175, 0.55) !important;
+                color: #dbeafe !important;
+            }
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 antialiased">
+<body class="bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100">
     <div class="resume-doc min-h-screen">
-        <header class="relative overflow-hidden bg-slate-950 text-white">
-            <div class="no-print absolute inset-0 bg-gradient-to-br from-brand-700 via-slate-900 to-slate-950 opacity-95"></div>
-            <div class="no-print absolute -left-20 top-10 h-56 w-56 rounded-full bg-brand-500/20 blur-3xl"></div>
-            <div class="no-print absolute right-0 top-0 h-72 w-72 rounded-full bg-cyan-400/10 blur-3xl"></div>
+        <header class="relative overflow-hidden bg-brand-900 text-white">
+            <div class="pointer-events-none no-print absolute inset-0 bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900 opacity-95"></div>
+            <div class="pointer-events-none no-print absolute -left-20 top-10 h-56 w-56 rounded-full bg-brand-500/20 blur-3xl"></div>
+            <div class="pointer-events-none no-print absolute right-0 top-0 h-72 w-72 rounded-full bg-cyan-400/10 blur-3xl"></div>
 
-            <div class="resume-header-inner relative mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
-                <div class="max-w-3xl">
+            <div class="resume-header-inner relative z-10 mx-auto flex max-w-7xl flex-col gap-4 px-4 py-8 sm:flex-row sm:items-start sm:justify-between sm:gap-6 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
+                <div class="max-w-3xl min-w-0 flex-1">
                     <div class="mb-2 inline-flex items-center rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-medium text-slate-200 backdrop-blur sm:text-sm">
                         Aspiring Software Developer
                     </div>
@@ -208,154 +290,211 @@
                         </li>
                     </ul>
                 </div>
+                <div class="no-print relative z-50 flex shrink-0 items-center justify-end sm:pt-1">
+                    <div
+                        class="pointer-events-auto inline-flex rounded-full border border-amber-300/90 bg-amber-50/95 p-0.5 shadow-lg shadow-black/25 ring-1 ring-amber-200/80 backdrop-blur-sm"
+                        role="group"
+                        aria-label="Color theme"
+                    >
+                        <button
+                            type="button"
+                            data-theme-pill="light"
+                            class="theme-pill cursor-pointer touch-manipulation rounded-full px-3 py-1.5 text-xs font-semibold transition"
+                            aria-pressed="false"
+                        >
+                            Light
+                        </button>
+                        <button
+                            type="button"
+                            data-theme-pill="dark"
+                            class="theme-pill cursor-pointer touch-manipulation rounded-full px-3 py-1.5 text-xs font-semibold transition"
+                            aria-pressed="true"
+                        >
+                            Dark
+                        </button>
+                    </div>
+                </div>
             </div>
         </header>
 
         <main class="resume-main mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-16">
             <div id="resume-main-grid" class="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
                 <div class="resume-stack space-y-8">
-                    <section class="resume-section rounded-3xl bg-white p-6 shadow-soft ring-1 ring-slate-200 sm:p-8">
-                        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-600">Skills</p>
-                        <h2 class="mt-2 text-2xl font-bold text-slate-900">What I Bring</h2>
+                    <section class="resume-section rounded-3xl bg-white p-6 shadow-soft ring-1 ring-slate-200 sm:p-8 dark:bg-slate-900 dark:shadow-[0_10px_30px_rgba(0,0,0,0.35)] dark:ring-slate-700">
+                        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400">Skills</p>
+                        <h2 class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">What I Bring</h2>
+                        <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                            Orange skill pills are clickable and open the portfolio.
+                        </p>
 
                         <div class="mt-6 space-y-5">
                             <div>
-                                <h3 class="text-sm font-semibold text-slate-700">Web Development</h3>
+                                <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300">Web Development</h3>
                                 <div class="mt-3 flex flex-wrap gap-2">
-                                    <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700">HTML</span>
-                                    <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700">CSS</span>
-                                    <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700">Javascript</span>
-                                    <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700">Python</span>
-                                    <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700">Java</span>
-                                    <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700">Playwright</span>
-                                    <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700">Cypress</span>
-                                    <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700">PHP</span>
-                                    <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700">MySQL</span>
+                                    <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700 dark:bg-brand-900/65 dark:text-brand-100">HTML</span>
+                                    <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700 dark:bg-brand-900/65 dark:text-brand-100">CSS</span>
+                                    <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700 dark:bg-brand-900/65 dark:text-brand-100">Javascript</span>
+                                    <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700 dark:bg-brand-900/65 dark:text-brand-100">Python</span>
+                                    <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700 dark:bg-brand-900/65 dark:text-brand-100">Java</span>
+                                    <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700 dark:bg-brand-900/65 dark:text-brand-100">Playwright</span>
+                                    <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700 dark:bg-brand-900/65 dark:text-brand-100">Cypress</span>
+                                    <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700 dark:bg-brand-900/65 dark:text-brand-100">PHP</span>
+                                    <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700 dark:bg-brand-900/65 dark:text-brand-100">MySQL</span>
                                 </div>
                             </div>
 
                             <div>
-                                <h3 class="text-sm font-semibold text-slate-700">Software</h3>
+                                <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300">Software</h3>
                                 <div class="mt-3 flex flex-wrap gap-2">
-                                    <span class="rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700">Visual Studio Code</span>
+                                    <span class="rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700 dark:bg-slate-700/55 dark:text-slate-300">Visual Studio Code</span>
                                     <a
-                                        class="rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700 ring-1 ring-slate-200/80 transition hover:bg-slate-200 hover:text-slate-900"
+                                        class="rounded-full bg-orange-100 px-3 py-1 text-sm font-medium text-orange-950 ring-1 ring-orange-300/90 transition hover:bg-orange-200 hover:text-orange-950 dark:bg-orange-950/55 dark:text-orange-100 dark:ring-orange-700/85 dark:hover:bg-orange-900/65 dark:hover:text-orange-50"
                                         href="/models/"
                                     >Fusion 360</a>
+                                    <a
+                                        class="rounded-full bg-orange-100 px-3 py-1 text-sm font-medium text-orange-950 ring-1 ring-orange-300/90 transition hover:bg-orange-200 hover:text-orange-950 dark:bg-orange-950/55 dark:text-orange-100 dark:ring-orange-700/85 dark:hover:bg-orange-900/65 dark:hover:text-orange-50"
+                                        href="/models/"
+                                    >Inventor Professional</a>
                                 </div>
                             </div>
                         </div>
                     </section>
 
-                    <section class="resume-section rounded-3xl bg-white p-6 shadow-soft ring-1 ring-slate-200 sm:p-8">
+                    <section class="resume-section rounded-3xl bg-white p-6 shadow-soft ring-1 ring-slate-200 sm:p-8 dark:bg-slate-900 dark:shadow-[0_10px_30px_rgba(0,0,0,0.35)] dark:ring-slate-700">
                         <div class="flex items-center justify-between gap-4">
                             <div>
-                                <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-600">Education</p>
-                                <h2 class="mt-2 text-2xl font-bold text-slate-900">Academic Background</h2>
+                                <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400">Education</p>
+                                <h2 class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">Academic Background</h2>
                             </div>
                         </div>
 
                         <div class="mt-6 space-y-4">
-                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-600 dark:bg-slate-800/55">
                                 <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                                     <div>
-                                        <h3 class="text-lg font-semibold text-slate-900">University of Oklahoma</h3>
-                                        <p class="mt-1 text-sm text-slate-600">Norman, OK</p>
-                                        <p class="mt-2 text-sm leading-6 text-slate-700">
+                                        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">University of Oklahoma</h3>
+                                        <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">Norman, OK</p>
+                                        <p class="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">
                                             Software Development and Integrations (SDI) major
                                         </p>
-                                        <p class="mt-2 text-sm font-medium text-slate-700">GPA 4.0</p>
+                                        <p class="mt-2 text-sm font-medium text-slate-700 dark:text-slate-300">GPA 4.0</p>
                                     </div>
-                                    <p class="text-sm font-medium text-slate-500 sm:shrink-0">Aug 2025 – Present</p>
+                                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400 sm:shrink-0">Aug 2025 – Present</p>
                                 </div>
                             </div>
-                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-600 dark:bg-slate-800/55">
                                 <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                                     <div>
-                                        <h3 class="text-lg font-semibold text-slate-900">Carl Albert State College</h3>
-                                        <p class="mt-1 text-sm text-slate-600">Sallisaw, OK</p>
-                                        <p class="mt-2 text-sm leading-6 text-slate-700">Concurrent enrollment</p>
-                                        <p class="mt-2 text-sm font-medium text-slate-700">GPA 4.0</p>
+                                        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">Carl Albert State College</h3>
+                                        <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">Sallisaw, OK</p>
+                                        <p class="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">Concurrent enrollment</p>
+                                        <p class="mt-2 text-sm font-medium text-slate-700 dark:text-slate-300">GPA 4.0</p>
                                     </div>
-                                    <p class="text-sm font-medium text-slate-500 sm:shrink-0">Aug 2023 – May 2025</p>
+                                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400 sm:shrink-0">Aug 2023 – May 2025</p>
                                 </div>
                             </div>
-                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-600 dark:bg-slate-800/55">
                                 <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                                     <div>
-                                        <h3 class="text-lg font-semibold text-slate-900">Sallisaw High School</h3>
-                                        <p class="mt-1 text-sm text-slate-600">Sallisaw, OK</p>
-                                        <p class="mt-2 text-sm font-medium text-slate-700">GPA 4.6 (Valedictorian)</p>
+                                        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">Sallisaw High School</h3>
+                                        <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">Sallisaw, OK</p>
+                                        <p class="mt-2 text-sm font-medium text-slate-700 dark:text-slate-300">GPA 4.6 (Valedictorian)</p>
                                     </div>
-                                    <p class="text-sm font-medium text-slate-500 sm:shrink-0">Sep 2021 – May 2025</p>
+                                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400 sm:shrink-0">Sep 2021 – May 2025</p>
                                 </div>
                             </div>
                         </div>
                     </section>
 
-                    <section class="resume-section rounded-3xl bg-white p-6 shadow-soft ring-1 ring-slate-200 sm:p-8">
-                        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-600">Recognition</p>
-                        <h2 class="mt-2 text-2xl font-bold text-slate-900">Awards</h2>
+                    <section class="resume-section rounded-3xl bg-white p-6 shadow-soft ring-1 ring-slate-200 sm:p-8 dark:bg-slate-900 dark:shadow-[0_10px_30px_rgba(0,0,0,0.35)] dark:ring-slate-700">
+                        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400">Recognition</p>
+                        <h2 class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">Awards</h2>
 
                         <div class="mt-6 space-y-4">
-                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-600 dark:bg-slate-800/55">
                                 <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                                     <div>
-                                        <h3 class="text-lg font-semibold text-slate-900">Phi Sigma Theta</h3>
-                                        <p class="mt-1 text-sm text-slate-600">Honors fraternity</p>
+                                        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">SCLA</h3>
+                                        <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">The Society for Collegiate Leadership & Achievement</p>
                                     </div>
-                                    <p class="text-sm font-medium text-slate-500">March 2026</p>
+                                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400">May 2026</p>
                                 </div>
-                                <p class="award-blurb mt-3 text-sm leading-7 text-slate-700">
-                                    A national honor society that recognizes superior academic achievement among undergraduates and encourages leadership, service, and continued scholarship.
+                                <p class="award-blurb mt-3 text-sm leading-7 text-slate-700 dark:text-slate-300">
+                                    A national society that recognizes academic achievement and supports leadership development and career readiness for college students.
                                 </p>
                             </div>
 
-                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-600 dark:bg-slate-800/55">
                                 <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                                     <div>
-                                        <h3 class="text-lg font-semibold text-slate-900">Alpha Lambda Delta</h3>
-                                        <p class="mt-1 text-sm text-slate-600">Honors fraternity</p>
+                                        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">JHLP</h3>
+                                        <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">Jerry Holmes Leadership Program · University of Oklahoma</p>
                                     </div>
-                                    <p class="text-sm font-medium text-slate-500">March 2026</p>
+                                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400">May 2026</p>
                                 </div>
-                                <p class="award-blurb mt-3 text-sm leading-7 text-slate-700">
+                                <p class="award-blurb mt-3 text-sm leading-7 text-slate-700 dark:text-slate-300">
+                                    Engineering leadership program focused on ethical, effective leadership—collaboration, decision-making, and professional skills for technical careers.
+                                </p>
+                            </div>
+
+                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-600 dark:bg-slate-800/55">
+                                <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">Alpha Lambda Delta</h3>
+                                        <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">Honors fraternity</p>
+                                    </div>
+                                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400">March 2026</p>
+                                </div>
+                                <p class="award-blurb mt-3 text-sm leading-7 text-slate-700 dark:text-slate-300">
                                     A national honor society that recognizes outstanding academic achievement during the first year of full-time undergraduate study.
                                 </p>
                             </div>
 
-                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-600 dark:bg-slate-800/55">
                                 <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                                     <div>
-                                        <h3 class="text-lg font-semibold text-slate-900">National Award Scholarship</h3>
-                                        <p class="mt-1 text-sm text-slate-600">University of Oklahoma</p>
+                                        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">Phi Sigma Theta</h3>
+                                        <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">Honors fraternity</p>
                                     </div>
-                                    <p class="text-sm font-medium text-slate-500">May 2025</p>
+                                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400">March 2026</p>
                                 </div>
-                                <p class="award-blurb mt-3 text-sm leading-7 text-slate-700">
+                                <p class="award-blurb mt-3 text-sm leading-7 text-slate-700 dark:text-slate-300">
+                                    A national honor society that recognizes superior academic achievement among undergraduates and encourages leadership, service, and continued scholarship.
+                                </p>
+                            </div>
+
+                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-600 dark:bg-slate-800/55">
+                                <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">National Award Scholarship</h3>
+                                        <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">University of Oklahoma</p>
+                                    </div>
+                                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400">May 2025</p>
+                                </div>
+                                <p class="award-blurb mt-3 text-sm leading-7 text-slate-700 dark:text-slate-300">
                                     National Award Scholarship winner at the University of Oklahoma.
                                 </p>
                             </div>
 
-                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-600 dark:bg-slate-800/55">
                                 <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                                     <div>
-                                        <h3 class="text-lg font-semibold text-slate-900">National Indigenous Recognition Program</h3>
-                                        <p class="mt-1 text-sm text-slate-600">Awarded by CollegeBoard.org</p>
+                                        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">National Indigenous Recognition Program</h3>
+                                        <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">Awarded by CollegeBoard.org</p>
                                     </div>
-                                    <p class="text-sm font-medium text-slate-500">Aug 2024</p>
+                                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Aug 2024</p>
                                 </div>
-                                <p class="award-blurb mt-4 text-sm leading-7 text-slate-700">
+                                <p class="award-blurb mt-4 text-sm leading-7 text-slate-700 dark:text-slate-300">
                                     The National Indigenous Recognition Program celebrates the academic achievements of Native American, Alaska Native, Native Hawaiian and Pacific Islander students.
                                 </p>
                             </div>
                         </div>
                     </section>
 
-                    <section class="resume-section rounded-3xl bg-white p-6 shadow-soft ring-1 ring-slate-200 sm:p-8">
-                        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-600">Personal</p>
-                        <h2 class="mt-2 text-2xl font-bold text-slate-900">Beyond academics</h2>
-                        <ul class="mt-4 list-disc space-y-1.5 pl-5 text-sm leading-6 text-slate-700 sm:text-base">
+                    <section class="resume-section rounded-3xl bg-white p-6 shadow-soft ring-1 ring-slate-200 sm:p-8 dark:bg-slate-900 dark:shadow-[0_10px_30px_rgba(0,0,0,0.35)] dark:ring-slate-700">
+                        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400">Personal</p>
+                        <h2 class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">Beyond academics</h2>
+                        <ul class="mt-4 list-disc space-y-1.5 pl-5 text-sm leading-6 text-slate-700 dark:text-slate-300 sm:text-base">
                             <li>Can solve a Rubik's Cube in under one minute</li>
                             <li>Lockpicking as a mechanical puzzle hobby</li>
                             <li>Accidentally became a published poet</li>
@@ -364,29 +503,29 @@
                 </div>
 
                 <div class="resume-stack space-y-8">
-                    <section class="resume-section rounded-3xl bg-white p-6 shadow-soft ring-1 ring-slate-200 sm:p-8">
-                        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-600">Work</p>
-                        <h2 class="mt-2 text-2xl font-bold text-slate-900">Experience</h2>
-                        <p class="mt-1 text-sm text-slate-600">Internships and roles in IT support and quality assurance.</p>
+                    <section class="resume-section rounded-3xl bg-white p-6 shadow-soft ring-1 ring-slate-200 sm:p-8 dark:bg-slate-900 dark:shadow-[0_10px_30px_rgba(0,0,0,0.35)] dark:ring-slate-700">
+                        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400">Work</p>
+                        <h2 class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">Experience</h2>
+                        <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">Internships and roles in IT support and quality assurance.</p>
 
-                        <div class="mt-8 space-y-10 border-l-2 border-brand-100 pl-6">
+                        <div class="mt-8 space-y-10 border-l-2 border-brand-100 pl-6 dark:border-brand-900/80">
                             <div class="relative">
-                                <span class="absolute -left-[33px] top-2 h-4 w-4 rounded-full border-4 border-white bg-brand-600 shadow"></span>
-                                <div class="experience-print-trim rounded-2xl border border-slate-200 p-5">
+                                <span class="absolute -left-[33px] top-2 h-4 w-4 rounded-full border-4 border-white bg-brand-600 shadow dark:border-slate-900"></span>
+                                <div class="experience-print-trim rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-600 dark:bg-slate-800/45">
                                     <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                                         <div>
-                                            <h3 class="text-lg font-semibold text-slate-900">Locally.com</h3>
-                                            <p class="mt-1 text-sm text-slate-600">QA internship · Quality Assurance Engineer</p>
+                                            <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">Locally.com</h3>
+                                            <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">QA internship · Quality Assurance Engineer</p>
                                         </div>
-                                        <p class="text-sm font-medium text-slate-500 sm:shrink-0">Feb 2026 – Present</p>
+                                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400 sm:shrink-0">Feb 2026 – Present</p>
                                     </div>
-                                    <p class="mt-4 text-sm leading-7 text-slate-700 sm:text-base">
+                                    <p class="mt-4 text-sm leading-7 text-slate-700 dark:text-slate-300 sm:text-base">
                                         I work with engineering to keep automated end-to-end tests (run via GitHub Actions) reliable as the product evolves. Day to day I translate real user flows into maintainable Playwright scenarios, review failures with developers to decide whether a test or the application needs attention, and help standardize patterns so new coverage is consistent and easy to extend.
                                     </p>
-                                    <p class="mt-3 text-sm leading-7 text-slate-700 sm:text-base">
+                                    <p class="mt-3 text-sm leading-7 text-slate-700 dark:text-slate-300 sm:text-base">
                                         A major focus has been modernizing the suite by moving legacy Cypress tests to Playwright—mapping equivalent steps, tightening assertions, and improving stability—while also authoring brand-new site tests for areas that lacked automation. That work supports faster feedback in CI and gives the team more confidence before releases.
                                     </p>
-                                    <ul class="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-slate-700 sm:text-base">
+                                    <ul class="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-slate-700 dark:text-slate-300 sm:text-base">
                                         <li>Converted existing Cypress tests to Playwright, in addition to writing new site tests</li>
                                         <li>Collaborated with developers to triage flaky runs, refine selectors, and strengthen coverage on high-traffic flows</li>
                                         <li>Contributed to shared test utilities and documentation so new scenarios stay consistent and easier to maintain</li>
@@ -395,19 +534,19 @@
                             </div>
 
                             <div class="relative">
-                                <span class="absolute -left-[33px] top-2 h-4 w-4 rounded-full border-4 border-white bg-brand-600 shadow"></span>
-                                <div class="rounded-2xl border border-slate-200 p-5">
+                                <span class="absolute -left-[33px] top-2 h-4 w-4 rounded-full border-4 border-white bg-brand-600 shadow dark:border-slate-900"></span>
+                                <div class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-600 dark:bg-slate-800/45">
                                     <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                                         <div>
-                                            <h3 class="text-lg font-semibold text-slate-900">Cherokee Nation</h3>
-                                            <p class="mt-1 text-sm text-slate-600">IT internship · Student Chief of IT</p>
+                                            <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">Cherokee Nation</h3>
+                                            <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">IT internship · Student Chief of IT</p>
                                         </div>
-                                        <p class="text-sm font-medium text-slate-500 sm:shrink-0">Jun 2022 – Jul 2025</p>
+                                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400 sm:shrink-0">Jun 2022 – Jul 2025</p>
                                     </div>
-                                    <p class="mt-4 text-sm leading-7 text-slate-700 sm:text-base">
+                                    <p class="mt-4 text-sm leading-7 text-slate-700 dark:text-slate-300 sm:text-base">
                                         Led hands-on technical work across a large fleet of devices for the internship program—prioritizing repairs, imaging, and deployments so staff and students stayed productive on Windows, Mac, and ChromeOS.
                                     </p>
-                                    <ul class="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-slate-700 sm:text-base">
+                                    <ul class="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-slate-700 dark:text-slate-300 sm:text-base">
                                         <li>Repaired 300+ Chromebooks across multiple models</li>
                                         <li>Built or upgraded nearly 100 Windows PCs</li>
                                         <li>Managed 1,000+ devices including Windows, macOS, and ChromeOS systems</li>
@@ -417,40 +556,40 @@
                         </div>
                     </section>
 
-                    <section class="resume-section rounded-3xl bg-white p-6 shadow-soft ring-1 ring-slate-200 sm:p-8">
-                        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-600">Volunteer</p>
-                        <h2 class="mt-2 text-2xl font-bold text-slate-900">Son's of the American Legion</h2>
+                    <section class="resume-section rounded-3xl bg-white p-6 shadow-soft ring-1 ring-slate-200 sm:p-8 dark:bg-slate-900 dark:shadow-[0_10px_30px_rgba(0,0,0,0.35)] dark:ring-slate-700">
+                        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400">Volunteer</p>
+                        <h2 class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">Son's of the American Legion</h2>
 
-                        <div class="volunteer-print-collapse mt-6 rounded-2xl border border-slate-200 p-5">
+                        <div class="volunteer-print-collapse mt-6 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-600 dark:bg-slate-800/45">
                             <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                                 <div>
-                                    <h3 class="text-lg font-semibold text-slate-900">Member</h3>
+                                    <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">Member</h3>
                                 </div>
-                                <p class="text-sm font-medium text-slate-500">Aug 2024 – Present</p>
+                                <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Aug 2024 – Present</p>
                             </div>
-                            <p class="mt-4 text-sm leading-7 text-slate-700">
+                            <p class="mt-4 text-sm leading-7 text-slate-700 dark:text-slate-300">
                                 The American Legion is built on a promise from men and women who swore with their lives to defend and protect the United States through military service. The promise begins at enlistment, grows through training and discipline in the U.S. Armed Forces and continues after discharge, as veterans in service to community, state and nation.
                             </p>
-                            <p class="mt-4 text-sm leading-7 text-slate-700">
+                            <p class="mt-4 text-sm leading-7 text-slate-700 dark:text-slate-300">
                                 I just recently became a member of the Sons of the American Legion organization. As a new member, my responsibilities include attending meetings, volunteering at events, and supporting veterans and their families. I am excited to be part of this organization and to contribute to the community in a meaningful way. I look forward to learning more about the history and mission of the Sons of the American Legion and how I can make a positive impact through my involvement.
                             </p>
                         </div>
                     </section>
 
-                    <section class="resume-section rounded-3xl bg-white p-6 shadow-soft ring-1 ring-slate-200 sm:p-8">
-                        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-600">Projects</p>
-                        <h2 class="mt-2 text-2xl font-bold text-slate-900">Highlighted Work</h2>
+                    <section class="resume-section rounded-3xl bg-white p-6 shadow-soft ring-1 ring-slate-200 sm:p-8 dark:bg-slate-900 dark:shadow-[0_10px_30px_rgba(0,0,0,0.35)] dark:ring-slate-700">
+                        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400">Projects</p>
+                        <h2 class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">Highlighted Work</h2>
 
                         <div class="mt-6 space-y-6">
-                            <div class="rounded-2xl border border-slate-200 p-5">
+                            <div class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-600 dark:bg-slate-800/45">
                                 <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                                    <h3 class="text-lg font-semibold text-slate-900">Java Application – Minecraft Plugin</h3>
-                                    <p class="text-sm font-medium text-slate-500">Nov 2023 – Present</p>
+                                    <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">Java Application – Minecraft Plugin</h3>
+                                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Nov 2023 – Present</p>
                                 </div>
-                                <p class="mt-4 text-sm leading-7 text-slate-700">
+                                <p class="mt-4 text-sm leading-7 text-slate-700 dark:text-slate-300">
                                     A custom Minecraft plugin created using Java that adds new features and functionality to the game. The plugin allows players to interact with the game in new ways, such as creating custom items, adding new commands, and implementing unique gameplay mechanics. This project was a great opportunity to learn more about Java programming and game development, as well as to explore the Minecraft modding community.
                                 </p>
-                                <ul class="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-slate-700">
+                                <ul class="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-slate-700 dark:text-slate-300">
                                     <li>Created a Minecraft plugin using Java</li>
                                     <li>Implemented custom features and functionality</li>
                                     <li>Learned how to develop and deploy a plugin for a popular game</li>
@@ -462,6 +601,75 @@
             </div>
         </main>
     </div>
+    <script>
+        (function () {
+            var STORAGE_KEY = 'brax10-theme';
+
+            function applyTheme(mode) {
+                var root = document.documentElement;
+                if (mode === 'dark') {
+                    root.classList.add('dark');
+                } else {
+                    root.classList.remove('dark');
+                }
+                try {
+                    localStorage.setItem(STORAGE_KEY, mode);
+                } catch (e) {
+                    /* ignore */
+                }
+                document.querySelectorAll('[data-theme-pill]').forEach(function (el) {
+                    var m = el.getAttribute('data-theme-pill');
+                    el.setAttribute('aria-pressed', m === mode ? 'true' : 'false');
+                });
+            }
+
+            function resolveMode() {
+                try {
+                    var s = localStorage.getItem(STORAGE_KEY);
+                    if (s === 'light') {
+                        return 'light';
+                    }
+                    if (s === 'dark') {
+                        return 'dark';
+                    }
+                } catch (e) {
+                    /* ignore */
+                }
+                return 'dark';
+            }
+
+            function bindThemeUi() {
+                var root = document.documentElement;
+                if (root.dataset.themeUiBound === '1') {
+                    return;
+                }
+                root.dataset.themeUiBound = '1';
+
+                document.querySelectorAll('[data-theme-pill]').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        applyTheme(btn.getAttribute('data-theme-pill') || 'dark');
+                    });
+                });
+            }
+
+            function init() {
+                try {
+                    applyTheme(resolveMode());
+                    bindThemeUi();
+                } catch (e) {
+                    if (typeof console !== 'undefined' && console.warn) {
+                        console.warn('theme-toggle init failed', e);
+                    }
+                }
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+    </script>
 </body>
 </html>
 
